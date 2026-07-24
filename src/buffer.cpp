@@ -12,7 +12,7 @@ void Buffer::insertNewLine(const int row, const int col)
     auto& line{ m_lines[row] };
 
     if (col < 0 || col > line.size()) {
-        throw std::out_of_range{ std::format("ERROR Buffer::insertNewLine(): cursor column is out of range: {} out of {}", col, m_lines.size()) };
+        throw std::out_of_range{ std::format("ERROR Buffer::insertNewLine(): cursor column is out of range: {} out of {}", col, m_lines[row].length()) };
     }
 
     auto right{ line.substr(col, line.length() - 1) };
@@ -29,7 +29,7 @@ void Buffer::insertCharacter(const int row, const int col, const char c)
     auto& line{ m_lines[row] };
 
     if (col < 0 || col > line.size()) {
-        throw std::out_of_range{ std::format("ERROR Buffer::insertCharacter(): cursor column is out of range: {} out of {}", col, m_lines.size()) };
+        throw std::out_of_range{ std::format("ERROR Buffer::insertCharacter(): cursor column is out of range: {} out of {}", col, m_lines[row].length()) };
     }
 
     line.insert(line.begin() + col, c);
@@ -44,7 +44,7 @@ void Buffer::deleteCharacter(const int row, const int col)
     auto& line{ m_lines[row] };
 
     if (col < 0 || col > line.size() - 1) {
-        throw std::out_of_range{ std::format("ERROR Buffer::deleteCharacter(): cursor column is out of range: {} out of {}", col, m_lines.size()) };
+        throw std::out_of_range{ std::format("ERROR Buffer::deleteCharacter(): cursor column is out of range: {} out of {}", col, m_lines[row].length()) };
     }
 
     m_lines.erase(m_lines.begin() + col);

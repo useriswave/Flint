@@ -33,7 +33,7 @@ void Editor::handleInput(int key)
             break;
     }
 
-    m_screen.drawStatusLine(m_cursor);
+    // m_screen.drawStatusLine(m_cursor);
 }
 
 void Editor::handleNormalMode(const int key)
@@ -63,7 +63,28 @@ void Editor::handleNormalMode(const int key)
             break;
 
         case 'a':
+            if (static_cast<int>(m_buffer.getText(m_cursor.row).length()) - 1 > 0) {
+                move(m_cursor.row, ++m_cursor.col);
+            }
+
+            m_editMode = EditMode::insert;
+            break;
+
         case 'i':
+            m_editMode = EditMode::insert;
+            break;
+
+        case 'I':
+            m_cursor.col = 0;
+            break;
+
+        case 'A':
+            const auto& currentLine{ m_buffer.getText(m_cursor.row) };
+
+            if (static_cast<int>(currentLine.length()) - 1 > 0) {
+                move(m_cursor.row, ++m_cursor.col);
+            }
+
             m_editMode = EditMode::insert;
             break;
     }
@@ -80,6 +101,7 @@ void Editor::handleInsertMode(const int key)
         case '\r':
             addNewLine();
             break;
+
 
         default:
             outputCharacter(key);
@@ -116,10 +138,17 @@ void Editor::moveDownNormalMode()
         return;
     }
 
-    auto& nextLine{ m_buffer.getText(m_cursor.row + 1) };
-    int nextLineCols{ static_cast<int>(nextLine.length()) - 1 };
+    const auto& nextLine{ m_buffer.getText(m_cursor.row + 1) };
+    const int nextLineCols{ static_cast<int>(nextLine.length()) - 1 };
 
-    m_cursor.stickyCol = std::min(m_cursor.col, nextLineCols);
+    if (nextLine.empty()) {
+        m_cursor.stickyCol = 0;
+    } else if (nextLineCols < m_cursor.col) {
+        m_cursor.stickyCol = nextLineCols;
+    } else {
+        m_cursor.stickyCol = m_cursor.col;
+    }
+
     move(++m_cursor.row, m_cursor.stickyCol);
 }
 
@@ -129,15 +158,18 @@ void Editor::moveUpNormalMode()
         return;
     }
 
-    auto previousLine{ m_buffer.getText(m_cursor.row - 1) };
-    int previousLineCols{ static_cast<int>(previousLine.length()) - 1 };
+    const auto& previousLine{ m_buffer.getText(m_cursor.row - 1) };
+    const int previousLineCols{ static_cast<int>(previousLine.length()) - 1 };
+
+    // i wwanna move down
+    // requirements:
+    // previouss line length must be >= cursor.col
+    // and if its less or 0 then set it to 0 or the length.
 
     if (previousLine.empty()) {
         m_cursor.stickyCol = 0;
-    } else if (previousLineCols < m_cursor.stickyCol) {
+    } else if (previousLineCols < m_cursor.col) {
         m_cursor.stickyCol = previousLineCols;
-    } else if (previousLineCols > m_cursor.stickyCol) {
-        m_cursor.stickyCol = m_cursor.col;
     } else {
         m_cursor.stickyCol = m_cursor.col;
     }
@@ -147,30 +179,40 @@ void Editor::moveUpNormalMode()
 
 void Editor::moveDownInsertMode()
 {
-    auto& text{ m_buffer.getText(m_cursor.row+1) };
-
-    if (!text.empty()) {
-        m_cursor.col = text.length();
-    } else {
-        m_cursor.col = 0;
-    }
-
     ++m_cursor.row;
-    move(m_cursor.row, m_cursor.col);
+    m_cursor.col = 0;
 }
 
-void Editor::moveRight()
+void Editor::moveRight()    // might wanna separate normal from insert mode (for now its both, move right should be last on addch)
 {
-    if (m_cursor.col <= m_buffer.getText(m_cursor.row).length()) {
+    if (m_editMode == EditMode::insert) {
+
         move(m_cursor.row, ++m_cursor.col);
+
+    } else if (m_editMode == EditMode::normal) {
+
+        if (m_cursor.col >= static_cast<int>(m_buffer.getText(m_cursor.row).length()) - 1) {
+            return;
+        }
+
+        m_cursor.col = ++m_cursor.stickyCol;
+        move(m_cursor.row, m_cursor.stickyCol);
+
+    } else if (m_editMode == EditMode::visual) {
+
+    } else {
+
     }
 }
 
 void Editor::moveLeft()
 {
-    if (m_cursor.col > 0) {
-        move(m_cursor.row, --m_cursor.col);
+    if (m_cursor.stickyCol <= 0) {  // issue here
+        return;
     }
+
+    m_cursor.col = --m_cursor.stickyCol;
+    move(m_cursor.row, m_cursor.stickyCol);
 }
 
 void Editor::moveCursorTopLeft()
