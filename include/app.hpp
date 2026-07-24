@@ -11,7 +11,8 @@ class App
 public:
     App() = default;
 
-    ~App() {
+    ~App()
+    {
         endwin();
     }
 

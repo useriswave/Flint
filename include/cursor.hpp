@@ -5,6 +5,7 @@ struct Cursor
 {
     int row{};
     int col{};
+    int stickyCol{};
 };
 
 #endif

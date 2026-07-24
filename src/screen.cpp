@@ -3,12 +3,12 @@
 #include <ncurses.h>
 #include <string>
 
-int getHeight()
+int Screen::getHeight()
 {
     return getmaxy(stdscr);
 }
 
-int getWidth()
+int Screen::getWidth()
 {
     return getmaxx(stdscr);
 }
@@ -28,3 +28,15 @@ void Screen::eraseCharacter(int row, int col)
 {
     mvdelch(row, col);
 }
+
+void Screen::drawStatusLine(Cursor& cursor)
+{
+    int row{ cursor.row };
+    int col{ cursor.col };
+
+    m_height = getHeight();
+    mvaddstr(m_height - 1, 0, "Hello");
+
+    move(row, col);
+}
+

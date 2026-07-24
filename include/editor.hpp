@@ -19,13 +19,18 @@ public:
     void handleInput(const int key);
 
 private:
-    void handleNormalMode(const int key);
-    void handleInsertMode(const int key);
-    void handleVisualMode(const int key);
+    void handleNormalMode(int key);
+    void handleInsertMode(int key);
+    void handleVisualMode(int key);
 
 private:
-    void moveDown();
-    void moveUp();
+    void addNewLine();
+    void outputCharacter(int key);
+
+private:
+    void moveDownNormalMode();
+    void moveDownInsertMode();
+    void moveUpNormalMode();
     void moveRight();
     void moveLeft();
     void moveCursorTopLeft();
