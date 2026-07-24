@@ -1,4 +1,5 @@
 #include "../include/editor.hpp"
+
 #include <ncurses.h>
 
 namespace
@@ -16,16 +17,7 @@ bool Editor::isOpen() const noexcept
 void Editor::init()
 {
     getScreenSize();
-    drawEOB();
-}
-
-void Editor::drawEOB()
-{
-    for (int i{ m_cursor.col + 1 }; i < m_height; ++i) {
-        mvprintw(i, 0, "%c", '~');
-    }
-
-    refresh();
+    moveCursorTopLeft();
 }
 
 void Editor::getScreenSize()
@@ -47,7 +39,7 @@ void Editor::handleInput(int key)
             break;
     }
 
-    updateStatusLine();
+    // updateStatusLine();
 }
 
 void Editor::handleNormalMode(const int key)
@@ -77,6 +69,7 @@ void Editor::handleNormalMode(const int key)
             break;
 
         case 'a':
+        case 'i':
             m_editMode = EditMode::insert;
             break;
     }
@@ -89,10 +82,11 @@ void Editor::handleInsertMode(const int key)
             m_editMode = EditMode::normal;
             break;
         default:
-            outputCharacter(static_cast<char>(key));
+            m_buffer.insertCharacter(m_cursor.row, m_cursor.col, key);
+            m_screen.drawLine(m_cursor.row, m_buffer.getText(m_cursor.row));
+            moveRight();
             break;
     }
-
 }
 
 void Editor::handleVisualMode(const int key)
@@ -120,14 +114,7 @@ void Editor::moveLeft()
     move(m_cursor.row, --m_cursor.col);
 }
 
-void Editor::outputCharacter(const char c)
+void Editor::moveCursorTopLeft()
 {
-    mvaddch(m_cursor.row, m_cursor.col, c);
-    moveRight();
+    move((m_cursor.row = 0), (m_cursor.col = 0));
 }
-
-void Editor::updateStatusLine()
-{
-    mvaddstr(m_height, 0, "FEET");
-}
-

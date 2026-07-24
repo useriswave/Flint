@@ -1,5 +1,9 @@
 #include "../include/cursor.hpp"
 #include "../include/editmode.hpp"
+#include "../include/buffer.hpp"
+#include "../include/screen.hpp"
+
+#include "filehandler.hpp"
 
 class Editor
 {
@@ -11,7 +15,6 @@ public:
 public:
     bool isOpen() const noexcept;
     void init();
-    void drawEOB();
     void getScreenSize();
     void handleInput(const int key);
 
@@ -25,10 +28,12 @@ private:
     void moveUp();
     void moveRight();
     void moveLeft();
-    void outputCharacter(const char c);
-    void updateStatusLine();
+    void moveCursorTopLeft();
 
 private:
+    FileHandler m_fileHandler{};
+    Buffer m_buffer{};
+    Screen m_screen{};
     Cursor m_cursor{};
     int m_height{};
     int m_width{};
