@@ -161,11 +161,6 @@ void Editor::moveUpNormalMode()
     const auto& previousLine{ m_buffer.getText(m_cursor.row - 1) };
     const int previousLineCols{ static_cast<int>(previousLine.length()) - 1 };
 
-    // i wwanna move down
-    // requirements:
-    // previouss line length must be >= cursor.col
-    // and if its less or 0 then set it to 0 or the length.
-
     if (previousLine.empty()) {
         m_cursor.stickyCol = 0;
     } else if (previousLineCols < m_cursor.col) {

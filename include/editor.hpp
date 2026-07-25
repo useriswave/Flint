@@ -8,9 +8,7 @@
 class Editor
 {
 public:
-    Editor()
-    {
-    }
+    Editor() = default;
 
 public:
     bool isOpen() const noexcept;
@@ -28,20 +26,24 @@ private:
     void outputCharacter(int key);
 
 private:
-    void moveDownNormalMode();
     void moveDownInsertMode();
+    void moveDownNormalMode();
     void moveUpNormalMode();
     void moveRight();
     void moveLeft();
     void moveCursorTopLeft();
+    void moveToLineEnd();       // $
+    void moveToLineStart();     // 0
+    void appendAtLineEnd();     // A
+    void insertAtLineStart();   // I
 
 private:
     FileHandler m_fileHandler{};
     Buffer m_buffer{};
     Screen m_screen{};
     Cursor m_cursor{};
+    EditMode m_editMode{ EditMode::normal };
     int m_height{};
     int m_width{};
     bool m_isOpen{ true };
-    EditMode m_editMode{ EditMode::normal };
 };
