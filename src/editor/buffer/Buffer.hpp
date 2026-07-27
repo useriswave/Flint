@@ -1,3 +1,6 @@
+#ifndef BUFFER_HPP
+#define BUFFER_HPP
+
 #include <vector>
 #include <string>
 
@@ -22,3 +25,5 @@ public:
 private:
     std::vector<std::string> m_lines{};
 };
+
+#endif

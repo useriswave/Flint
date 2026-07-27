@@ -1,4 +1,4 @@
-#include "../include/screen.hpp"
+#include "tui/Screen.hpp"
 
 #include <ncurses.h>
 #include <string>

@@ -1,4 +1,4 @@
-#include "../include/app.hpp"
+#include "app/App.hpp"
 
 void App::start()
 {
@@ -6,7 +6,7 @@ void App::start()
     m_editor.init();
 
     while (m_editor.isOpen()) {
-        m_editor.handleInput(m_key = getch());
+        m_editor.handleInput(getch());
     }
 }
 
@@ -20,5 +20,3 @@ void App::init()
 
     refresh();
 }
-
-

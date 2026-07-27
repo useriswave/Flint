@@ -1,4 +1,4 @@
-#include "../include/buffer.hpp"
+#include "editor/buffer/Buffer.hpp"
 
 #include <stdexcept>
 #include <format>

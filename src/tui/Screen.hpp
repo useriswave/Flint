@@ -1,7 +1,7 @@
 #ifndef SCREEN_HPP
 #define SCREEN_HPP
 
-#include "../include/cursor.hpp"
+#include "editor/Cursor.hpp"
 
 #include <string>
 
