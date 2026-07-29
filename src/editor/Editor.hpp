@@ -47,7 +47,7 @@ public:
     void close() noexcept;
 
 public:
-    Cursor getCursor() { return m_cursor; }
+    const Cursor& getCursor() const { return m_cursor; }
 
 private:
     FileHandler m_fileHandler{};
