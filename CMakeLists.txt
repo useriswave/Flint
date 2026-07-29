@@ -6,7 +6,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(Flint VERSION 0.0 LANGUAGES CXX)
 
+set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses REQUIRED)
+
+if(NOT CURSES_FOUND)
+    message(FATAL_ERROR "NCurses has not been found on your system.")
+endif()
 
 set(
     SRC_FILES
@@ -33,4 +38,8 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/src
     ${CURSES_INCLUDE_DIRS}
 )
+
+enable_testing()
+add_subdirectory(tests)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE ${CURSES_LIBRARIES})

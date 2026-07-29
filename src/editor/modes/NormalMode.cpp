@@ -1,4 +1,6 @@
 #include "editor/modes/NormalMode.hpp"
+#include "editor/EditorKeys.hpp"
+
 
 void NormalMode::execute(int key)
 {
@@ -20,12 +22,12 @@ void NormalMode::execute(int key)
             break;
 
         case 'A':
-            moveToEndOfLine();
+            moveToEndOfLine(m_cursor, m_buffer);
             m_modeType = ModeType::insert;
             break;
 
         case 'I':
-        moveToStartOfLine();
+        moveToStartOfLine(m_cursor, m_buffer);
         m_modeType = ModeType::insert;
         break;
     }

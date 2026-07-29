@@ -1,6 +1,6 @@
 #include "editor/modes/VisualMode.hpp"
 
-void execute(int key)
+void VisualMode::execute(int key)
 {
 
 }

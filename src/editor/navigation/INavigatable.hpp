@@ -2,6 +2,7 @@
 #define IHORIZONTALMOVABLE_HPP
 
 #include "editor/Cursor.hpp"
+#include "editor/buffer/Buffer.hpp"
 
 class INavigatable
 {

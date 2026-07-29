@@ -3,6 +3,7 @@
 
 #include "editor/modes/ModeType.hpp"
 #include "editor/Cursor.hpp"
+#include "editor/buffer/Buffer.hpp"
 
 class IMode
 {

@@ -3,12 +3,10 @@
 
 namespace EditorKeys
 {
-    constexpr int g_ESCAPE_KEY{ 27 };
-
-    constexpr int ctrlKey(char key)
-    {
-        return key & 0x1f;
-    }
+    constexpr int ESCAPE{ '\x1B' };
+    constexpr int BACKSPACE{ '\x7F' };
+    constexpr int CTRL_Q{ 0x11 };
+    constexpr char ENTER{ '\n'};
+}
 
 #endif
-}

@@ -1,8 +1,8 @@
 #include "editor/Editor.hpp"
-#include "editor/EditorKeys.hpp"
 
 #include "editor/modes/InsertMode.hpp"
 #include "editor/modes/VisualMode.hpp"
+#include "editor/modes/NormalMode.hpp"
 
 #include <ncurses.h>
 
@@ -13,7 +13,7 @@ bool Editor::isOpen() const noexcept
 
 void Editor::init()
 {
-    moveCursorTopLeft();
+    moveCursorTopLeft();    // call in constructor if this is the only call
 }
 
 void Editor::handleInput(int key)

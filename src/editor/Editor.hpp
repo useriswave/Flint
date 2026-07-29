@@ -10,7 +10,7 @@
 class Editor
 {
 public:
-    Editor() = default;
+    Editor() { init(); }
 
 public:
     bool isOpen() const noexcept;

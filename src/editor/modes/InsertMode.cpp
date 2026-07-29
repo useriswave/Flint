@@ -1,4 +1,5 @@
 #include "editor/modes/InsertMode.hpp"
+#include "editor/EditorKeys.hpp"
 
 void InsertMode::execute(int key)
 {
