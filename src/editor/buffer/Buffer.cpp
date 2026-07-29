@@ -50,6 +50,11 @@ void Buffer::deleteCharacter(const int row, const int col)
     m_lines.erase(m_lines.begin() + col);
 }
 
+const std::vector<std::string>& Buffer::lines() const
+{
+    return m_lines;
+}
+
 const std::string& Buffer::getText(const int row) const
 {
     if (row < 0 || row >= m_lines.size()) {

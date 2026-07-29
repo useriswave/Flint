@@ -18,6 +18,7 @@ public:
     void deleteCharacter(int row, int col);
 
 public:
+    const std::vector<std::string>& lines() const;
     const std::string& getText(int row) const;
     std::size_t lineCount() const;
     std::size_t getRemainingLines(int row) const;

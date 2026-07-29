@@ -1,8 +1,6 @@
 #include "editor/Editor.hpp"
 
-#include "editor/modes/InsertMode.hpp"
-#include "editor/modes/VisualMode.hpp"
-#include "editor/modes/NormalMode.hpp"
+#include "editor/EditorKeys.hpp"
 
 #include <ncurses.h>
 
@@ -18,29 +16,12 @@ void Editor::init()
 
 void Editor::handleInput(int key)
 {
-    auto previousType{ m_modeType };
     m_mode->execute(key);
-
-    if (previousType != m_modeType) {
-        changeMode();
-    }
 }
 
-void Editor::changeMode()
+void Editor::changeMode(std::unique_ptr<IMode> mode)
 {
-    switch (m_modeType) {
-        case ModeType::normal:
-            m_mode = std::make_unique<NormalMode>(m_buffer, m_cursor, m_modeType);
-            break;
-
-        case ModeType::visual:
-            m_mode = std::make_unique<VisualMode>(m_buffer, m_cursor, m_modeType);
-            break;
-
-        case ModeType::insert:
-            m_mode = std::make_unique<InsertMode>(m_buffer, m_cursor, m_modeType);
-            break;
-    }
+    m_mode = std::move(mode);
 }
 
 void Editor::addNewLine()
@@ -55,3 +36,9 @@ void Editor::moveCursorTopLeft()
 {
     // move((m_cursor.row = 0), (m_cursor.col = 0));
 }
+
+void Editor::close() noexcept
+{
+    m_isOpen = false;
+}
+

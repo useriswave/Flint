@@ -2,7 +2,7 @@
 #include "editor/EditorKeys.hpp"
 
 
-void NormalMode::execute(int key)
+void NormalMode::execute(Editor& editor, int key)
 {
     switch (key) {
         case 'k':
@@ -27,8 +27,8 @@ void NormalMode::execute(int key)
             break;
 
         case 'I':
-        moveToStartOfLine(m_cursor, m_buffer);
-        m_modeType = ModeType::insert;
+            moveToStartOfLine(m_cursor, m_buffer);
+            m_modeType = ModeType::insert;
         break;
     }
 }
