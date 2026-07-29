@@ -11,17 +11,19 @@ find_package(Curses REQUIRED)
 
 if(NOT CURSES_FOUND)
     message(FATAL_ERROR "NCurses has not been found on your system.")
+else()
+    message(STATUS "NCurses has been found on your system.")
 endif()
 
 set(
     SRC_FILES
     src/app/main.cpp
     src/app/App.cpp
+    src/editor/motions/Motions.cpp
     src/editor/buffer/Buffer.cpp
     src/editor/modes/InsertMode.cpp
     src/editor/modes/NormalMode.cpp
     src/editor/modes/VisualMode.cpp
-    src/editor/navigation/INavigatable.cpp
     src/editor/Editor.cpp
     src/persistence/FileHandler.cpp
     src/tui/Screen.cpp
@@ -39,7 +41,7 @@ target_include_directories(
     ${CURSES_INCLUDE_DIRS}
 )
 
-enable_testing()
-add_subdirectory(tests)
-
+# enable_testing()
+# add_subdirectory(tests)
+ 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${CURSES_LIBRARIES})

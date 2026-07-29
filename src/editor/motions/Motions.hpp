@@ -4,15 +4,15 @@
 #include "editor/Cursor.hpp"
 #include "editor/buffer/Buffer.hpp"
 
-class INavigatable
+class Motions
 {
-protected:
+public:
     void moveUp(Cursor& cursor, const Buffer& buffer);
     void moveDown(Cursor& cursor, const Buffer& buffer);
     void moveRight(Cursor& cursor, const Buffer& buffer);
     void moveLeft(Cursor& cursor, const Buffer& buffer);
 
-protected:
+public:
     void moveToEndOfLine(Cursor& cursor, const Buffer& buffer);
     void moveToStartOfLine(Cursor& cursor, const Buffer& buffer);
 };

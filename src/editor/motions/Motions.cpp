@@ -1,6 +1,6 @@
-#include "editor/navigation/INavigatable.hpp"
+#include "editor/motions/Motions.hpp"
 
-void INavigatable::moveUp(Cursor& cursor, const Buffer& buffer)
+void Motions::moveUp(Cursor& cursor, const Buffer& buffer)
 {
     if (cursor.row > 0) {
         const auto& previousLine{ buffer.getText(cursor.row - 1) };
@@ -11,7 +11,7 @@ void INavigatable::moveUp(Cursor& cursor, const Buffer& buffer)
     }
 }
 
-void INavigatable::moveDown(Cursor& cursor, const Buffer& buffer)
+void Motions::moveDown(Cursor& cursor, const Buffer& buffer)
 {
     if (cursor.row < static_cast<int>(buffer.lineCount()) - 1) {
         const auto& nextLine{ buffer.getText(cursor.row + 1) };
@@ -22,15 +22,15 @@ void INavigatable::moveDown(Cursor& cursor, const Buffer& buffer)
     }
 }
 
-void INavigatable::moveRight(Cursor& cursor, const Buffer& buffer)
+void Motions::moveRight(Cursor& cursor, const Buffer& buffer)
 {
-    if (cursor.col < static_cast<int>(buffer.getText(cursor.row).length()) - 1) {
+    if (cursor.col < static_cast<int>(buffer.getText(cursor.row).length())) {
         ++cursor.col;
         cursor.savedCol = cursor.col;
     }
 }
 
-void INavigatable::moveLeft(Cursor& cursor, const Buffer& buffer)
+void Motions::moveLeft(Cursor& cursor, const Buffer& buffer)
 {
     if (cursor.col > 0) {
         --cursor.col;
@@ -38,7 +38,7 @@ void INavigatable::moveLeft(Cursor& cursor, const Buffer& buffer)
     }
 }
 
-void INavigatable::moveToEndOfLine(Cursor& cursor, const Buffer& buffer)
+void Motions::moveToEndOfLine(Cursor& cursor, const Buffer& buffer)
 {
     const auto& line{ buffer.getText(cursor.row) };
     const auto lineCols{ line.empty() ? 0 : static_cast<int>(buffer.getText(cursor.row).length()) - 1 };
@@ -49,7 +49,7 @@ void INavigatable::moveToEndOfLine(Cursor& cursor, const Buffer& buffer)
     }
 }
 
-void INavigatable::moveToStartOfLine(Cursor& cursor, const Buffer& buffer)
+void Motions::moveToStartOfLine(Cursor& cursor, const Buffer& buffer)
 {
     cursor.col = 0;
     cursor.savedCol = 0;

@@ -1,10 +1,16 @@
 #include "editor/modes/InsertMode.hpp"
+#include "editor/modes/NormalMode.hpp"
 #include "editor/EditorKeys.hpp"
+#include "editor/Editor.hpp"
 
-void InsertMode::execute(int key)
+#include <memory>
+
+void InsertMode::execute(Editor& editor, int key)
 {
     if (key == EditorKeys::ESCAPE) {
-        m_modeType = ModeType::normal;
+        editor.setMode(std::make_unique<NormalMode>());
+    } else {
+        editor.outputCharacter(key);
     }
 }
 

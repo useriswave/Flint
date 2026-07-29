@@ -13,9 +13,9 @@ int Screen::getWidth()
     return getmaxx(stdscr);
 }
 
-void Screen::printCharacter(const int row, const int col, const char c)
+void Screen::printCharacter(Cursor& cursor, const char c)
 {
-    mvaddch(row, col, c);
+    mvaddch(cursor.row, cursor.col, c);
 }
 
 void Screen::drawLine(const int row, const std::string& line)
@@ -24,9 +24,14 @@ void Screen::drawLine(const int row, const std::string& line)
     mvaddstr(row, 0, line.c_str());
 }
 
-void Screen::eraseCharacter(int row, int col)
+void Screen::drawCursor(Cursor& cursor)
 {
-    mvdelch(row, col);
+    move(cursor.row, cursor.col);
+}
+
+void Screen::eraseCharacter(Cursor& cursor)
+{
+    mvdelch(cursor.row, cursor.col);
 }
 
 void Screen::drawStatusLine(Cursor& cursor)

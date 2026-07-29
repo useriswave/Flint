@@ -6,12 +6,7 @@
 class InsertMode : public IMode
 {
 public:
-    InsertMode(Buffer& buffer, Cursor& cursor, ModeType& modeType)
-        : IMode{ buffer, cursor, modeType }
-    {}
-
-public:
-    void execute(int key) override;
+    void execute(Editor& editor, int key) override;
 };
 
 #endif

@@ -12,9 +12,10 @@ public:
     int getWidth();
 
 public:
-    void printCharacter(int row, int col, char c);
+    void printCharacter(Cursor&, char c);
     void drawLine(int row, const std::string& line);
-    void eraseCharacter(int row, int col);
+    void drawCursor(Cursor& cursor);
+    void eraseCharacter(Cursor& cursor);
 
 public:
     void drawStatusLine(Cursor& cursor);
