@@ -51,7 +51,11 @@ void Buffer::deleteCharacter(const int row, const int col)
         throw std::out_of_range{ std::format("ERROR Buffer::deleteCharacter(): cursor column is out of range: {} out of {}", col, m_lines[row].length()) };
     }
 
-    line.erase(line.begin() + col);
+    if (line.empty()) {
+        m_lines.erase(m_lines.begin() + row);
+    } else {
+        line.erase(line.begin() + col);
+    }
 }
 
 const std::vector<std::string>& Buffer::lines() const

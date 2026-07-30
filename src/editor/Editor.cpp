@@ -120,6 +120,9 @@ void Editor::deleteCharacter()
         return;
 
     if (m_buffer.getText(m_cursor.row()).empty()) {
+        // REMOVES ROW BECAUSE COL == 0
+        m_buffer.deleteCharacter(m_cursor.row(), m_cursor.col());
+
         m_cursor.decrementRow();
 
         if (m_buffer.getText(m_cursor.row()).empty()) {
@@ -128,12 +131,12 @@ void Editor::deleteCharacter()
             m_cursor.syncCols(m_buffer.getText(m_cursor.row()).length());
         }
 
+        return;
     } else {
         moveLeft();
-        m_buffer.deleteCharacter(m_cursor.row(), m_cursor.col());
     }
 
-
+    m_buffer.deleteCharacter(m_cursor.row(), m_cursor.col());
     m_screen.drawLine(m_cursor.row(), m_buffer.getText(m_cursor.row()));
 }
 
