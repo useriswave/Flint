@@ -14,7 +14,7 @@ public:
 
 public:
     void insertNewLine(int row, int col);
-    void insertCharacter(int row, int col, char c);
+    void insertCharacter(int row, int col, int c);
     void deleteCharacter(int row, int col);
 
 public:

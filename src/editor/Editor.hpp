@@ -16,7 +16,7 @@
 class Editor
 {
 public:
-    Editor() {} /*{ init(); } */
+    Editor() = default; /*{ init(); } */
 
 public:
     [[nodiscard]] bool isOpen() const noexcept;
@@ -35,6 +35,7 @@ public:
 
 public:
     void addNewLine();
+    void deleteCharacter();
     void outputCharacter(int key);
     void moveCursorTopLeft();
 

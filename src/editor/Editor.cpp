@@ -114,6 +114,29 @@ void Editor::outputCharacter(const int key)
     m_motions.moveRight(m_cursor, m_buffer);
 }
 
+void Editor::deleteCharacter()
+{
+    if (m_cursor.row() == 0 && m_cursor.col() == 0)
+        return;
+
+    if (m_buffer.getText(m_cursor.row()).empty()) {
+        m_cursor.decrementRow();
+
+        if (m_buffer.getText(m_cursor.row()).empty()) {
+            m_cursor.syncCols(0);
+        } else {
+            m_cursor.syncCols(m_buffer.getText(m_cursor.row()).length());
+        }
+
+    } else {
+        moveLeft();
+        m_buffer.deleteCharacter(m_cursor.row(), m_cursor.col());
+    }
+
+
+    m_screen.drawLine(m_cursor.row(), m_buffer.getText(m_cursor.row()));
+}
+
 void Editor::moveCursorTopLeft()
 {
     m_cursor.setCol(0);

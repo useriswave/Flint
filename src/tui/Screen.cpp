@@ -14,7 +14,7 @@ int Screen::getWidth()
     return getmaxx(stdscr);
 }
 
-void Screen::printCharacter(Cursor& cursor, const char c)
+void Screen::printCharacter(Cursor& cursor, const int c)
 {
     mvaddch(cursor.row(), cursor.col(), c);
 }

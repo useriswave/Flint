@@ -14,9 +14,8 @@ void App::start()
 void App::init()
 {
     initscr();
-    noecho();
-    cbreak();
     raw();
+    noecho();
     keypad(stdscr, true);
     set_escdelay(25);
 

@@ -12,7 +12,7 @@ public:
     int getWidth();
 
 public:
-    void printCharacter(Cursor&, char c);
+    void printCharacter(Cursor&, int c);
     void drawLine(int row, const std::string& line);
     void drawCursor(Cursor& cursor);
     void eraseCharacter(Cursor& cursor);

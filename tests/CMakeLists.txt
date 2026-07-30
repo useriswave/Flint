@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 set(
     TEST_SOURCES
-    MotionsTest.cpp
+    motions/MotionsTest.cpp
+    buffer/BufferTests.cpp
 )
 
 include(FetchContent)

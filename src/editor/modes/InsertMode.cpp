@@ -1,6 +1,7 @@
 #include "editor/modes/InsertMode.hpp"
 #include "editor/EditorKeys.hpp"
 #include "editor/Editor.hpp"
+#include <ncurses.h>
 
 void InsertMode::execute(Editor& editor, int key)
 {
@@ -12,6 +13,10 @@ void InsertMode::execute(Editor& editor, int key)
 
         case EditorKeys::ENTER:
             editor.addNewLine();
+            break;
+
+        case KEY_BACKSPACE:
+            editor.deleteCharacter();
             break;
 
         default:

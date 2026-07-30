@@ -1,7 +1,11 @@
 #include "editor/buffer/Buffer.hpp"
+#include "editor/EditorKeys.hpp"
 
+#include <ncurses.h>
 #include <stdexcept>
 #include <format>
+
+// TODO:: fix tabs. when tab is pressed, moveRight is triggered. but it shuold be x4 (write tests)
 
 void Buffer::insertNewLine(const int row, const int col)
 {
@@ -20,7 +24,7 @@ void Buffer::insertNewLine(const int row, const int col)
     m_lines.insert(m_lines.begin() + row + 1, std::move(right));
 }
 
-void Buffer::insertCharacter(const int row, const int col, const char c)
+void Buffer::insertCharacter(const int row, const int col, const int c)
 {
     if (row < 0 || row > static_cast<int>(m_lines.size()) - 1) {
         throw std::out_of_range{ std::format("ERROR Buffer::insertCharacter(): cursor row is out of range: {} out of {}", row, m_lines.size()) };
@@ -43,11 +47,11 @@ void Buffer::deleteCharacter(const int row, const int col)
 
     auto& line{ m_lines[row] };
 
-    if (col < 0 || col > line.size() - 1) {
+    if (col < 0 || col > line.size()) {
         throw std::out_of_range{ std::format("ERROR Buffer::deleteCharacter(): cursor column is out of range: {} out of {}", col, m_lines[row].length()) };
     }
 
-    m_lines.erase(m_lines.begin() + col);
+    line.erase(line.begin() + col);
 }
 
 const std::vector<std::string>& Buffer::lines() const
