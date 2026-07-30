@@ -7,7 +7,7 @@ namespace EditorKeys
     constexpr int BACKSPACE{ '\x7F' };
     constexpr int CTRL_Q{ 0x11 };
     constexpr int CTRL_S{ 0x13 };
-    constexpr char ENTER{ '\n'};
+    constexpr char ENTER{ '\n' };
 }
 
 #endif

@@ -16,10 +16,10 @@
 class Editor
 {
 public:
-    Editor() {}/*{ init(); } */
+    Editor() {} /*{ init(); } */
 
 public:
-    bool isOpen() const noexcept;
+    [[nodiscard]] bool isOpen() const noexcept;
     void init();
     void handleInput(const int key);
 
@@ -39,7 +39,7 @@ public:
     void moveCursorTopLeft();
 
 public:
-    void setMode(std::unique_ptr<IMode> mode);
+    void setMode(ModeType mode);
 
 public:
     void saveFile();
@@ -48,6 +48,7 @@ public:
 
 public:
     const Cursor& getCursor() const { return m_cursor; }
+    const IMode* currentMode() const { return m_mode.get(); }
 
 private:
     FileHandler m_fileHandler{};

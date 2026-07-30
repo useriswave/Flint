@@ -2,6 +2,7 @@
 
 #include <ncurses.h>
 #include <string>
+#include <format>
 
 int Screen::getHeight()
 {
@@ -15,7 +16,7 @@ int Screen::getWidth()
 
 void Screen::printCharacter(Cursor& cursor, const char c)
 {
-    mvaddch(cursor.row, cursor.col, c);
+    mvaddch(cursor.row(), cursor.col(), c);
 }
 
 void Screen::drawLine(const int row, const std::string& line)
@@ -26,22 +27,27 @@ void Screen::drawLine(const int row, const std::string& line)
 
 void Screen::drawCursor(Cursor& cursor)
 {
-    move(cursor.row, cursor.col);
+    refresh();
+    move(cursor.row(), cursor.col());
+    refresh();
+
 }
 
 void Screen::eraseCharacter(Cursor& cursor)
 {
-    mvdelch(cursor.row, cursor.col);
+    mvdelch(cursor.row(), cursor.col());
 }
 
 void Screen::drawStatusLine(Cursor& cursor)
 {
-    int row{ cursor.row };
-    int col{ cursor.col };
+    int row{ cursor.row() };
+    int col{ cursor.col() };
 
     m_height = getHeight();
-    mvaddstr(m_height - 1, 0, "Hello");
+    mvaddstr(m_height - 1, 0, std::format("---R{}:COL{}---", row, col).c_str());
+
+    cursor.setRow(row);
+    cursor.setCol(col);
 
     move(row, col);
 }
-

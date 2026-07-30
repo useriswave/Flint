@@ -14,6 +14,7 @@ public:
 
 public:
     void moveToEndOfLine(Cursor& cursor, const Buffer& buffer);
+    void moveToAppendEOL(Cursor& cursor, const Buffer& buffer);
     void moveToStartOfLine(Cursor& cursor, const Buffer& buffer);
 };
 

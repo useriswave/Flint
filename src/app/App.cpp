@@ -1,4 +1,5 @@
 #include "app/App.hpp"
+#include <ncurses.h>
 
 void App::start()
 {
@@ -17,6 +18,7 @@ void App::init()
     cbreak();
     raw();
     keypad(stdscr, true);
+    set_escdelay(25);
 
     refresh();
 }

@@ -1,6 +1,9 @@
 #include "editor/Editor.hpp"
 #include "editor/modes/InsertMode.hpp"
+#include "editor/modes/VisualMode.hpp"
+#include "editor/modes/ModeType.hpp"
 
+#include <memory>
 #include <ncurses.h>
 
 bool Editor::isOpen() const noexcept
@@ -17,6 +20,7 @@ void Editor::init()
 void Editor::handleInput(int key)
 {
     m_mode->execute(*this, key);
+    m_screen.drawStatusLine(m_cursor);
 }
 
 void Editor::moveUp()
@@ -58,29 +62,43 @@ void Editor::moveToEndOfLine()
 void Editor::insertAtStartOfLine()
 {
     moveToStartOfLine();
-    setMode(std::make_unique<InsertMode>());
+    setMode(ModeType::insert);
     m_screen.drawCursor(m_cursor);
 }
 
 void Editor::appendToEndOfLine()
 {
-    moveToEndOfLine();
-    setMode(std::make_unique<InsertMode>());
+    m_motions.moveToAppendEOL(m_cursor, m_buffer);
+    setMode(ModeType::insert);
     m_screen.drawCursor(m_cursor);
 }
 
-void Editor::setMode(std::unique_ptr<IMode> mode)
+void Editor::setMode(ModeType mode)
 {
-    m_mode = std::move(mode);
+    switch (mode) {
+        case ModeType::normal:
+            m_mode = std::move(std::make_unique<NormalMode>());
+            break;
+
+        case ModeType::visual:
+            m_mode = std::move(std::make_unique<VisualMode>());
+            break;
+
+        case ModeType::insert:
+            m_mode = std::move(std::make_unique<InsertMode>());
+            // m_buffer.getText(m_cursor.row()).empty() ? m_cursor.setCol(0) : m_cursor.incrementCol();
+            break;
+    }
 }
 
 void Editor::addNewLine()
 {
-    m_buffer.insertNewLine(m_cursor.row, m_cursor.col);
-    m_screen.drawLine(m_cursor.row, m_buffer.getText(m_cursor.row));
+    m_buffer.insertNewLine(m_cursor.row(), m_cursor.col());
+    m_screen.drawLine(m_cursor.row(), m_buffer.getText(m_cursor.row()));
 
-    for (std::size_t i{}; i < m_buffer.lineCount() - m_cursor.row; ++i) {
-        m_screen.drawLine(m_cursor.row+i, m_buffer.getText(m_cursor.row+i));
+
+    for (std::size_t i{}; i < m_buffer.lineCount() - m_cursor.row(); ++i) {
+        m_screen.drawLine(m_cursor.row()+i, m_buffer.getText(m_cursor.row()+i));
     }
 
     moveDown();
@@ -90,14 +108,17 @@ void Editor::addNewLine()
 
 void Editor::outputCharacter(const int key)
 {
-    m_buffer.insertCharacter(m_cursor.row, m_cursor.col, key);
-    m_screen.drawLine(m_cursor.row, m_buffer.getText(m_cursor.row));
-    moveRight();
+    m_buffer.insertCharacter(m_cursor.row(), m_cursor.col(), key);
+    m_screen.drawLine(m_cursor.row(), m_buffer.getText(m_cursor.row()));
+    // move(m_cursor.row, ++m_cursor.col);
+    m_motions.moveRight(m_cursor, m_buffer);
 }
 
 void Editor::moveCursorTopLeft()
 {
-    move((m_cursor.row = 0), (m_cursor.col = 0));
+    m_cursor.setCol(0);
+    m_cursor.setRow(0);
+    move(m_cursor.row(), m_cursor.col());
 }
 
 void Editor::saveFile()

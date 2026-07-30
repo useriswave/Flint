@@ -1,5 +1,3 @@
-#include "editor/modes/NormalMode.hpp"
-#include "editor/modes/InsertMode.hpp"
 #include "editor/EditorKeys.hpp"
 #include "editor/Editor.hpp"
 
@@ -23,11 +21,12 @@ void NormalMode::execute(Editor& editor, int key)
             break;
 
         case 'i':
-            editor.setMode(std::make_unique<InsertMode>());
+            editor.setMode(ModeType::insert);
             break;
 
         case 'a':
-            editor.setMode(std::make_unique<InsertMode>());
+            editor.setMode(ModeType::insert);
+            editor.moveRight();
             break;
 
         case '$':
