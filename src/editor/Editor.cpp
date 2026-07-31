@@ -13,64 +13,63 @@ bool Editor::isOpen() const noexcept
 
 void Editor::init()
 {
-    moveCursorTopLeft();    // call in constructor if this is the only call
+    resetCursor();
     m_isOpen = true;
 }
 
 void Editor::handleInput(int key)
 {
     m_mode->execute(*this, key);
-    m_screen.drawStatusLine(m_cursor);
+    m_screen.drawStatusLine(m_controller.cursor());
 }
 
 void Editor::moveUp()
 {
-    m_motions.moveUp(m_cursor, m_buffer);
-    m_screen.drawCursor(m_cursor);
+    m_controller.moveUp();
 }
 
 void Editor::moveDown()
 {
-    m_motions.moveDown(m_cursor, m_buffer);
-    m_screen.drawCursor(m_cursor);
+    m_controller.moveDown();
+    m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::moveRight()
 {
-    m_motions.moveRight(m_cursor, m_buffer);
-    m_screen.drawCursor(m_cursor);
+    m_controller.moveRight();
+    m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::moveLeft()
 {
-    m_motions.moveLeft(m_cursor, m_buffer);
-    m_screen.drawCursor(m_cursor);
+    m_controller.moveLeft();
+    m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::moveToStartOfLine()
 {
-    m_motions.moveToStartOfLine(m_cursor, m_buffer);
-    m_screen.drawCursor(m_cursor);
+    m_controller.moveToStartLine();
+    m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::moveToEndOfLine()
 {
-    m_motions.moveToEndOfLine(m_cursor, m_buffer);
-    m_screen.drawCursor(m_cursor);
+    m_controller.moveToEndLine();
+    m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::insertAtStartOfLine()
 {
-    moveToStartOfLine();
+    m_controller.moveToStartLine();
     setMode(ModeType::insert);
-    m_screen.drawCursor(m_cursor);
+    m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::appendToEndOfLine()
 {
-    m_motions.moveToAppendEOL(m_cursor, m_buffer);
+    m_controller.appendToEndLine();
     setMode(ModeType::insert);
-    m_screen.drawCursor(m_cursor);
+    m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::setMode(ModeType mode)
@@ -93,58 +92,30 @@ void Editor::setMode(ModeType mode)
 
 void Editor::addNewLine()
 {
-    m_buffer.insertNewLine(m_cursor.row(), m_cursor.col());
-    m_screen.drawLine(m_cursor.row(), m_buffer.getText(m_cursor.row()));
+    m_controller.addNewLine();
 
-
-    for (std::size_t i{}; i < m_buffer.lineCount() - m_cursor.row(); ++i) {
-        m_screen.drawLine(m_cursor.row()+i, m_buffer.getText(m_cursor.row()+i));
+    for (int i{ m_controller.cursor().row() }; i < m_controller.lineCount(); ++i) {
+        m_screen.refreshLine(i, m_controller.currentLine());
     }
 
-    moveDown();
-    m_motions.moveToStartOfLine(m_cursor, m_buffer);
-    m_screen.drawCursor(m_cursor);
+    m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::outputCharacter(const int key)
 {
-    m_buffer.insertCharacter(m_cursor.row(), m_cursor.col(), key);
-    m_screen.drawLine(m_cursor.row(), m_buffer.getText(m_cursor.row()));
-    // move(m_cursor.row, ++m_cursor.col);
-    m_motions.moveRight(m_cursor, m_buffer);
+    m_controller.addCharacter(key);
+    m_screen.refreshLine(m_controller.cursor().row(), m_controller.currentLine());
 }
 
 void Editor::deleteCharacter()
 {
-    if (m_cursor.row() == 0 && m_cursor.col() == 0)
-        return;
-
-    if (m_buffer.getText(m_cursor.row()).empty()) {
-        // REMOVES ROW BECAUSE COL == 0
-        m_buffer.deleteCharacter(m_cursor.row(), m_cursor.col());
-
-        m_cursor.decrementRow();
-
-        if (m_buffer.getText(m_cursor.row()).empty()) {
-            m_cursor.syncCols(0);
-        } else {
-            m_cursor.syncCols(m_buffer.getText(m_cursor.row()).length());
-        }
-
-        return;
-    } else {
-        moveLeft();
-    }
-
-    m_buffer.deleteCharacter(m_cursor.row(), m_cursor.col());
-    m_screen.drawLine(m_cursor.row(), m_buffer.getText(m_cursor.row()));
+    m_controller.backspace();
+    m_screen.refreshLine(m_controller.cursor().row(), m_controller.currentLine());
 }
 
-void Editor::moveCursorTopLeft()
+void Editor::resetCursor()
 {
-    m_cursor.setCol(0);
-    m_cursor.setRow(0);
-    move(m_cursor.row(), m_cursor.col());
+    m_controller.resetCursor();
 }
 
 void Editor::saveFile()
@@ -161,4 +132,3 @@ void Editor::close() noexcept
 {
     m_isOpen = false;
 }
-

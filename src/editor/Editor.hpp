@@ -1,15 +1,11 @@
 #ifndef EDITOR_HPP
 #define EDITOR_HPP
 
-#include "editor/Cursor.hpp"
+#include "editor/EditingController.hpp"
 #include "editor/modes/ModeType.hpp"
 #include "editor/modes/IMode.hpp"
 #include "editor/modes/NormalMode.hpp"
-#include "editor/motions/Motions.hpp"
-
 #include "tui/Screen.hpp"
-#include "buffer/Buffer.hpp"
-#include "persistence/FileHandler.hpp"
 
 #include <memory>
 
@@ -37,7 +33,7 @@ public:
     void addNewLine();
     void deleteCharacter();
     void outputCharacter(int key);
-    void moveCursorTopLeft();
+    void resetCursor();
 
 public:
     void setMode(ModeType mode);
@@ -47,16 +43,9 @@ public:
     void openFile();
     void close() noexcept;
 
-public:
-    const Cursor& getCursor() const { return m_cursor; }
-    const IMode* currentMode() const { return m_mode.get(); }
-
 private:
-    FileHandler m_fileHandler{};
-    Buffer m_buffer{};
+    EditingController m_controller{};
     Screen m_screen{};
-    Cursor m_cursor{};
-    Motions m_motions{};
     ModeType m_modeType{ ModeType::normal };
     std::unique_ptr<IMode> m_mode{ std::make_unique<NormalMode>() };
     bool m_isOpen{};

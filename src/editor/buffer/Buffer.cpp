@@ -1,7 +1,5 @@
 #include "editor/buffer/Buffer.hpp"
-#include "editor/EditorKeys.hpp"
 
-#include <ncurses.h>
 #include <stdexcept>
 #include <format>
 
@@ -10,7 +8,7 @@
 void Buffer::insertNewLine(const int row, const int col)
 {
     if (row < 0 || row > m_lines.size()) {
-        throw std::out_of_range{ std::format("ERROR Buffer::insertNewLine(): cursor row is out of range: {} out of {}", row, m_lines.size()) };
+        throw std::out_of_range{ std::format("ERROR Buffer::insertNewLine(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
     }
 
     auto& line{ m_lines[row] };
@@ -27,7 +25,7 @@ void Buffer::insertNewLine(const int row, const int col)
 void Buffer::insertCharacter(const int row, const int col, const int c)
 {
     if (row < 0 || row > static_cast<int>(m_lines.size()) - 1) {
-        throw std::out_of_range{ std::format("ERROR Buffer::insertCharacter(): cursor row is out of range: {} out of {}", row, m_lines.size()) };
+        throw std::out_of_range{ std::format("ERROR Buffer::insertCharacter(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
     }
 
     auto& line{ m_lines[row] };
@@ -39,23 +37,99 @@ void Buffer::insertCharacter(const int row, const int col, const int c)
     line.insert(line.begin() + col, c);
 }
 
-void Buffer::deleteCharacter(const int row, const int col)
+void Buffer::removeCharacter(const int row, const int col)
 {
     if (row < 0 || row > m_lines.size() - 1) {
-        throw std::out_of_range{ std::format("ERROR Buffer::deleteCharacter(): cursor row is out of range: {} out of {}", row, m_lines.size()) };
+        throw std::out_of_range{ std::format("ERROR Buffer::removeCharacter(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
     }
 
     auto& line{ m_lines[row] };
 
     if (col < 0 || col > line.size()) {
-        throw std::out_of_range{ std::format("ERROR Buffer::deleteCharacter(): cursor column is out of range: {} out of {}", col, m_lines[row].length()) };
+        throw std::out_of_range{ std::format("ERROR Buffer::removeCharacter(): cursor column is out of range: {} out of {}", col, line.length()) };
     }
 
-    if (line.empty()) {
-        m_lines.erase(m_lines.begin() + row);
-    } else {
-        line.erase(line.begin() + col);
+    line.erase(line.begin() + col);
+}
+
+void Buffer::removeLine(const int row)
+{
+    if (row < 0 || row > m_lines.size() - 1) {
+        throw std::out_of_range{ std::format("ERROR Buffer::removeLine(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
     }
+
+    m_lines.erase(m_lines.begin() + row);
+}
+
+/*
+*   if the col is > 0, remove the left most text exclusive to the col
+*   then, save the right most text, erase the line, and concatenate
+*   that remaining text to the previous line
+*/
+
+void Buffer::mergeLines(const int row, const int col)
+{
+    if (row < 0 || row > m_lines.size() - 1) {
+        throw std::out_of_range{ std::format("ERROR Buffer::mergeLines(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
+    }
+
+    auto& line{ m_lines[row] };
+
+    if (col < 0 || col > line.length()) {
+        throw std::out_of_range{ std::format("ERROR Buffer::mergeLines(): cursor column is out of range: {} out of {}", col, m_lines[row].length()) };
+    }
+
+    if (col > 0) {
+        line.erase(line.begin() + col - 1);
+    }
+
+    const auto remaining{ std::move(line) };
+    removeLine(row);
+
+    auto prev { previousLine(row) };
+
+    if (prev) {
+        prev->append(remaining);
+    }
+}
+
+std::optional<std::string> Buffer::previousLine(const int row)
+{
+    if (row < 0 || row > m_lines.size() - 1) {
+        throw std::out_of_range{ std::format("ERROR Buffer::previousLine(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
+    }
+
+    return row == 0 ? std::nullopt : std::optional<std::string>(m_lines[row - 1]);
+}
+
+std::optional<std::string> Buffer::nextLine(int row)
+{
+    if (row < 0 || row > m_lines.size() - 1) {
+        throw std::out_of_range{ std::format("ERROR Buffer::nextLine(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
+    }
+
+    return row == m_lines.size() - 1 ? std::nullopt : std::optional<std::string>(m_lines[row + 1]);
+}
+
+int Buffer::lineCols(const int row)
+{
+    if (row < 0 || row > m_lines.size() - 1) {
+        throw std::out_of_range{ std::format("ERROR Buffer::lineCols(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
+    }
+
+    return static_cast<int>(m_lines[row].length()) - 1;
+}
+
+std::optional<int> Buffer::previousCols(const int row)
+{
+    const auto& line{ previousLine(row) };
+    return line ? std::optional<int>(static_cast<int>(line->length()) - 1) : std::nullopt;
+}
+
+std::optional<int> Buffer::nextCols(const int row)
+{
+    const auto& line{ nextLine(row) };
+    return line ? std::optional<int>(static_cast<int>(line->length()) - 1) : std::nullopt;
 }
 
 const std::vector<std::string>& Buffer::lines() const
@@ -66,7 +140,7 @@ const std::vector<std::string>& Buffer::lines() const
 const std::string& Buffer::getText(const int row) const
 {
     if (row < 0 || row >= m_lines.size()) {
-        throw std::out_of_range{ std::format("ERROR Buffer::getText(): cursor row is out of range: {} out of {}", row, m_lines.size()) };
+        throw std::out_of_range{ std::format("ERROR Buffer::getText(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
     }
 
     return m_lines[row];

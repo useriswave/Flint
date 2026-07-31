@@ -1,36 +1,39 @@
-#include "editor/buffer/Buffer.hpp"
+#include "editor/Editor.cpp"
+#include "editor/EditingController.hpp"
 
 #include <gtest/gtest.h>
+#include <ncurses.h>
 
 TEST(BufferTest, BufferDeletesLastCharacterOfLine)
 {
-    Buffer buffer{};
+    EditingController controller{};
 
     std::string text{ "Hello World" };
 
-    for (int i{}; i < text.length(); ++i) {
-        buffer.insertCharacter(0, i, text[i]);
+    for (int i{}; i < text.length() - 1; ++i) {
+        controller.addCharacter(text[i]);
     }
 
-    buffer.deleteCharacter(0, text.length());
-    const auto& currentLine{ buffer.getText(0) };
+    controller.backspace();
+    const auto& currentLine{ controller.currentLine() };
 
     EXPECT_EQ(currentLine, "Hello Worl");
 }
 
 TEST(BufferTest, BackspaceAtFirstLetterDeletesFirstChar)
 {
-    Buffer buffer{};
+    EditingController controller{};
+    std::string text{ "Hello World" };
 
-    std::string text{ "THISISATEST" };
-
-    for (int i{}; i < text.length(); ++i) {
-        buffer.insertCharacter(0, i, text[i]);
+    for (std::size_t i{}; i < text.length(); ++i) {
+        controller.addCharacter(text[i]);
     }
 
-    buffer.deleteCharacter(0, 1);
-    const auto& currentLine{ buffer.getText(0) };
+    controller.moveToStartLine();
+    controller.moveRight();
+    controller.backspace();
 
-    EXPECT_EQ(currentLine, "THISISATEST");
+    const auto& current{ controller.currentLine() };
 
+    EXPECT_EQ(current, "ello World");
 }

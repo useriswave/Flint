@@ -82,3 +82,9 @@ void Cursor::reset()
     setRow(0);
     setCol(0);
 }
+
+bool Cursor::atBeginning()
+{
+    return (m_col == 0 && m_savedCol == 0) && m_row == 0;
+}
+

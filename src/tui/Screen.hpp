@@ -8,21 +8,21 @@
 class Screen
 {
 public:
-    int getHeight();
-    int getWidth();
+    [[maybe_unused]] int getHeight();
+    [[maybe_unused]] int getWidth();
 
 public:
-    void printCharacter(Cursor&, int c);
-    void drawLine(int row, const std::string& line);
-    void drawCursor(Cursor& cursor);
-    void eraseCharacter(Cursor& cursor);
+    void drawCharacter(const Cursor&, int c);
+    void refreshLine(int row, const std::string& line);
+    void refreshCursor(const Cursor& cursor);
+    [[maybe_unused]] void eraseCharacter(const Cursor& cursor);
 
 public:
-    void drawStatusLine(Cursor& cursor);
+    void drawStatusLine(const Cursor& cursor);
 
 private:
     int m_height{};
-    int m_width{};
+    [[maybe_unused]] int m_width{};
 };
 
 #endif

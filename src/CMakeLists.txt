@@ -8,6 +8,7 @@ set(
     editor/modes/InsertMode.cpp
     editor/modes/NormalMode.cpp
     editor/modes/VisualMode.cpp
+    editor/EditingController.cpp
     editor/Editor.cpp
     persistence/FileHandler.cpp
     tui/Screen.cpp

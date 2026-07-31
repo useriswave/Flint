@@ -21,6 +21,9 @@ public:
     void decrementRow();
     void reset();
 
+public:
+    bool atBeginning();
+
 private:
     int m_row{};
     int m_col{};

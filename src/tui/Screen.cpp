@@ -14,40 +14,35 @@ int Screen::getWidth()
     return getmaxx(stdscr);
 }
 
-void Screen::printCharacter(Cursor& cursor, const int c)
+void Screen::drawCharacter(const Cursor& cursor, const int c)
 {
     mvaddch(cursor.row(), cursor.col(), c);
 }
 
-void Screen::drawLine(const int row, const std::string& line)
+void Screen::refreshLine(const int row, const std::string& line)
 {
+    move(row, 0);
     clrtoeol();
     mvaddstr(row, 0, line.c_str());
 }
 
-void Screen::drawCursor(Cursor& cursor)
+void Screen::refreshCursor(const Cursor& cursor)
 {
-    refresh();
     move(cursor.row(), cursor.col());
-    refresh();
-
 }
 
-void Screen::eraseCharacter(Cursor& cursor)
+void Screen::eraseCharacter(const Cursor& cursor)
 {
     mvdelch(cursor.row(), cursor.col());
 }
 
-void Screen::drawStatusLine(Cursor& cursor)
+void Screen::drawStatusLine(const Cursor& cursor)
 {
     int row{ cursor.row() };
     int col{ cursor.col() };
 
     m_height = getHeight();
     mvaddstr(m_height - 1, 0, std::format("---R{}:COL{}---", row, col).c_str());
-
-    cursor.setRow(row);
-    cursor.setCol(col);
 
     move(row, col);
 }
