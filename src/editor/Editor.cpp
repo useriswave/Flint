@@ -19,6 +19,7 @@ bool Editor::isOpen() const noexcept
 
 void Editor::init()
 {
+    m_screen.refreshViewport(m_controller.cursor().row(), m_controller.cursor().col(), m_controller.lines());
     resetCursor();
     m_isOpen = true;
 }
