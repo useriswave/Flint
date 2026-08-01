@@ -57,6 +57,7 @@ void EditingController::backspace()
 
     if (m_cursor.col() == 0) {
         m_buffer.mergeLines(m_cursor.row(), m_cursor.col());
+        m_cursor.decrementRow();
         m_motions.moveToAppendEOL(m_cursor, m_buffer);
     } else {
         m_buffer.removeCharacter(m_cursor.row(), m_cursor.col() - 1);

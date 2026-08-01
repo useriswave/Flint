@@ -61,12 +61,6 @@ void Buffer::removeLine(const int row)
     m_lines.erase(m_lines.begin() + row);
 }
 
-/*
-*   if the col is > 0, remove the left most text exclusive to the col
-*   then, save the right most text, erase the line, and concatenate
-*   that remaining text to the previous line
-*/
-
 void Buffer::mergeLines(const int row, const int col)
 {
     if (row < 0 || row > m_lines.size() - 1) {
@@ -81,15 +75,17 @@ void Buffer::mergeLines(const int row, const int col)
 
     if (col > 0) {
         line.erase(line.begin() + col - 1);
-    }
+        const auto remaining{ std::move(line) };
+        removeLine(row);
 
-    const auto remaining{ std::move(line) };
-    removeLine(row);
+        auto prev { previousLine(row) };
 
-    auto prev { previousLine(row) };
-
-    if (prev) {
-        prev->append(remaining);
+        if (prev) {
+            prev->append(remaining);
+            m_lines[row-1] = std::move(*prev);
+        }
+    } else {
+        m_lines.erase(m_lines.begin() + row);
     }
 }
 
