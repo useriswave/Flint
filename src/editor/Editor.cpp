@@ -21,11 +21,13 @@ void Editor::handleInput(int key)
 {
     m_mode->execute(*this, key);
     m_screen.drawStatusLine(m_controller.cursor());
+    m_screen.refreshScreen();
 }
 
 void Editor::moveUp()
 {
     m_controller.moveUp();
+    m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::moveDown()
@@ -85,7 +87,6 @@ void Editor::setMode(ModeType mode)
 
         case ModeType::insert:
             m_mode = std::move(std::make_unique<InsertMode>());
-            // m_buffer.getText(m_cursor.row()).empty() ? m_cursor.setCol(0) : m_cursor.incrementCol();
             break;
     }
 }
@@ -93,24 +94,20 @@ void Editor::setMode(ModeType mode)
 void Editor::addNewLine()
 {
     m_controller.addNewLine();
-
-    for (int i{ m_controller.cursor().row() }; i < m_controller.lineCount(); ++i) {
-        m_screen.refreshLine(i, m_controller.currentLine());
-    }
-
+    m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
     m_screen.refreshCursor(m_controller.cursor());
 }
 
 void Editor::outputCharacter(const int key)
 {
     m_controller.addCharacter(key);
-    m_screen.refreshLine(m_controller.cursor().row(), m_controller.currentLine());
+    m_screen.refreshLine(m_controller.cursor().row(), m_controller.cursor().col(), m_controller.currentLine());
 }
 
 void Editor::deleteCharacter()
 {
     m_controller.backspace();
-    m_screen.refreshLine(m_controller.cursor().row(), m_controller.currentLine());
+    m_screen.refreshViewport(m_controller.cursor().row(), m_controller.cursor().col(), m_controller.lines());
 }
 
 void Editor::resetCursor()

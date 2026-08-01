@@ -37,3 +37,20 @@ TEST(BufferTest, BackspaceAtFirstLetterDeletesFirstChar)
 
     EXPECT_EQ(current, "ello World");
 }
+
+TEST(BufferTest, NewLineOnFirstCharMovesItDown)
+{
+    EditingController controller{};
+    std::string text{ "Hello World" };
+
+    for (std::size_t i{}; i < text.length() - 1; ++i) {
+        controller.addCharacter(text[i]);
+    }
+
+    controller.moveToStartLine();
+    controller.addNewLine();
+
+    const auto& current{ controller.currentLine() };
+    EXPECT_EQ(current, "Hello World");
+}
+

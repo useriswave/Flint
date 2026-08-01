@@ -26,6 +26,7 @@ public:
     const Cursor& cursor() const { return m_cursor; }
     int lineCount() { return m_buffer.lineCount(); }
     const std::string& currentLine() const { return m_buffer.getText(m_cursor.row()); };
+    const std::vector<std::string>& lines() const { return m_buffer.lines(); }
 
 private:
     Buffer m_buffer{};

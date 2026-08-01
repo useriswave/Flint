@@ -17,7 +17,7 @@ void Buffer::insertNewLine(const int row, const int col)
         throw std::out_of_range{ std::format("ERROR Buffer::insertNewLine(): cursor column is out of range: {} out of {}", col, m_lines[row].length()) };
     }
 
-    auto right{ line.substr(col, line.length() - 1) };
+    auto right{ line.substr(col, line.length()) };
     line.erase(line.begin() + col, line.end());
     m_lines.insert(m_lines.begin() + row + 1, std::move(right));
 }
@@ -73,20 +73,11 @@ void Buffer::mergeLines(const int row, const int col)
         throw std::out_of_range{ std::format("ERROR Buffer::mergeLines(): cursor column is out of range: {} out of {}", col, m_lines[row].length()) };
     }
 
-    if (col > 0) {
-        line.erase(line.begin() + col - 1);
-        const auto remaining{ std::move(line) };
-        removeLine(row);
+    auto& prev{ m_lines[row-1] };
+    const auto& current{ m_lines[row] };
 
-        auto prev { previousLine(row) };
-
-        if (prev) {
-            prev->append(remaining);
-            m_lines[row-1] = std::move(*prev);
-        }
-    } else {
-        m_lines.erase(m_lines.begin() + row);
-    }
+    prev.append(current);
+    m_lines.erase(m_lines.begin() + row);
 }
 
 std::optional<std::string> Buffer::previousLine(const int row)
