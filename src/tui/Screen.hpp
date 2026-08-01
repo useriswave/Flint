@@ -3,6 +3,7 @@
 
 #include "editor/Cursor.hpp"
 
+#include <ncurses.h>
 #include <string>
 #include <vector>
 
@@ -20,12 +21,16 @@ public:
     void refreshAll(const Cursor& cursor, const std::vector<std::string>& lines);
     void refreshViewport(int row, int col, const std::vector<std::string>& lines);
     void refreshLine(int row, int col, const std::string& line);
-    void refreshCursor(const Cursor& cursor);
+    void refreshCursor(const Cursor& cursor, const std::string& line);
     void refreshScreen();
 
 private:
-    int m_height{};
-    [[maybe_unused]] int m_width{};
+    std::string expandTabs(std::string::const_iterator start, std::string::const_iterator end);
+    int screenCol(const std::string& line, int col);
+
+private:
+    Cursor m_cursor{};
+    static constexpr int TAB_WIDTH{ 4 };
 };
 
 #endif

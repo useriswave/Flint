@@ -4,7 +4,13 @@
 #include "editor/modes/ModeType.hpp"
 
 #include <memory>
-#include <ncurses.h>
+
+void Editor::handleInput(int key)
+{
+    m_mode->execute(*this, key);
+    // m_screen.drawStatusLine(m_controller.cursor());
+    m_screen.refreshScreen();
+}
 
 bool Editor::isOpen() const noexcept
 {
@@ -17,61 +23,54 @@ void Editor::init()
     m_isOpen = true;
 }
 
-void Editor::handleInput(int key)
-{
-    m_mode->execute(*this, key);
-    m_screen.drawStatusLine(m_controller.cursor());
-    m_screen.refreshScreen();
-}
-
 void Editor::moveUp()
 {
     m_controller.moveUp();
-    m_screen.refreshCursor(m_controller.cursor());
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveDown()
 {
     m_controller.moveDown();
-    m_screen.refreshCursor(m_controller.cursor());
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveRight()
 {
     m_controller.moveRight();
-    m_screen.refreshCursor(m_controller.cursor());
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveLeft()
 {
     m_controller.moveLeft();
-    m_screen.refreshCursor(m_controller.cursor());
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveToStartOfLine()
 {
     m_controller.moveToStartLine();
-    m_screen.refreshCursor(m_controller.cursor());
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveToEndOfLine()
 {
     m_controller.moveToEndLine();
-    m_screen.refreshCursor(m_controller.cursor());
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::insertAtStartOfLine()
 {
     m_controller.moveToStartLine();
     setMode(ModeType::insert);
-    m_screen.refreshCursor(m_controller.cursor());
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::appendToEndOfLine()
 {
     m_controller.appendToEndLine();
     setMode(ModeType::insert);
-    m_screen.refreshCursor(m_controller.cursor());
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::setMode(ModeType mode)
@@ -94,8 +93,9 @@ void Editor::setMode(ModeType mode)
 void Editor::addNewLine()
 {
     m_controller.addNewLine();
-    m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
-    m_screen.refreshCursor(m_controller.cursor());
+     //m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
+     m_screen.refreshViewport(m_controller.cursor().row(), m_controller.cursor().col(), m_controller.lines());
+    // m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::outputCharacter(const int key)
@@ -108,6 +108,7 @@ void Editor::deleteCharacter()
 {
     m_controller.backspace();
     m_screen.refreshViewport(m_controller.cursor().row(), m_controller.cursor().col(), m_controller.lines());
+    // m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
 }
 
 void Editor::resetCursor()

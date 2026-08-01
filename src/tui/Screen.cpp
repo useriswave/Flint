@@ -25,7 +25,7 @@ void Screen::refreshAll(const Cursor& cursor, const std::vector<std::string>& li
         refreshLine(i, 0, lines[i]);
     }
 
-    move(cursor.row(), cursor.col());
+    move(cursor.row(), screenCol(lines[cursor.row()], cursor.col()));
 }
 
 void Screen::refreshViewport(const int row, const int col, const std::vector<std::string>& lines)
@@ -33,33 +33,33 @@ void Screen::refreshViewport(const int row, const int col, const std::vector<std
     erase();
 
     for (std::size_t i{}; i < lines.size(); ++i) {
-        mvaddstr(i, 0, lines[i].c_str());
+        std::string expanded{ expandTabs(lines[i].begin(), lines[i].end()) };
+        mvaddstr(i, 0, expanded.c_str());
     }
 
     for (std::size_t i{ lines.size() }; i < getHeight(); ++i) {
-        mvaddch(i, 0, '~');
+        mvaddch(static_cast<int>(i), 0, '~');
     }
 
-    move(row, col);
+    move(row, screenCol(lines[row], col));
     refresh();
 }
 
 void Screen::refreshLine(const int row, const int col, const std::string& line)
 {
-    int currentRow{ row };
-    int currentCol{ col };
+    std::string expanded{ expandTabs(line.begin(), line.end()) };
 
     move(row, 0);
 
     clrtoeol();
-    mvaddstr(row, 0, line.c_str());
+    mvaddstr(row, 0, expanded.c_str());
 
-    move(currentRow, currentCol);
+    move(row, screenCol(line, col));
 }
 
-void Screen::refreshCursor(const Cursor& cursor)
+void Screen::refreshCursor(const Cursor& cursor, const std::string& line)
 {
-    move(cursor.row(), cursor.col());
+    move(cursor.row(), screenCol(line, cursor.col()));
 }
 
 void Screen::refreshScreen()
@@ -72,10 +72,31 @@ void Screen::drawStatusLine(const Cursor& cursor)
     int row{ cursor.row() };
     int col{ cursor.col() };
 
-    m_height = getHeight();
-    move(m_height - 1, 0);
+    int height = getHeight();
+    move(height - 1, 0);
     clrtoeol();
-    mvaddstr(m_height - 1, 0, std::format("---R{}:COL{}---", row, col).c_str());
+    mvaddstr(height - 1, 0, std::format("---R{}:COL{}---", row, col).c_str());
 
     move(row, col);
 }
+
+std::string Screen::expandTabs(std::string::const_iterator start, std::string::const_iterator end)
+{
+    std::string expanded{};
+
+    for (auto it{ start }; it < end; ++it) {
+        if (*it == '\t') {
+            expanded.append(4, ' ');
+        } else {
+            expanded += *it;
+        }
+    }
+
+    return expanded;
+}
+
+int Screen::screenCol(const std::string& line, const int col)
+{
+    return static_cast<int>(expandTabs(line.begin(), line.begin() + col).length());
+}
+
