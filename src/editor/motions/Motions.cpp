@@ -24,7 +24,7 @@ void Motions::moveDown(Cursor& cursor, const Buffer& buffer)
 
 void Motions::moveRight(Cursor& cursor, const Buffer& buffer)
 {
-    if (cursor.col() < static_cast<int>(buffer.getText(cursor.row()).length())) {
+    if (cursor.col() < static_cast<int>(buffer.getText(cursor.row()).length()) - 1) {
         cursor.incrementCol();
     }
 }
@@ -43,17 +43,6 @@ void Motions::moveToEndOfLine(Cursor& cursor, const Buffer& buffer)
         cursor.syncCols(lineCols);
     }
 }
-
-void Motions::moveToAppendEOL(Cursor& cursor, const Buffer& buffer)
-{
-    const auto& line{ buffer.getText(cursor.row()) };
-    const auto lineCols{ line.empty() ? 0 : static_cast<int>(buffer.getText(cursor.row()).length()) };
-
-    if (cursor.col() < lineCols) {
-        cursor.syncCols(lineCols);
-    }
-}
-
 
 void Motions::moveToStartOfLine(Cursor& cursor, const Buffer& buffer)
 {

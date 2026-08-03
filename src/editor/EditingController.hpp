@@ -14,7 +14,8 @@ public:
     void moveLeft();
     void moveToStartLine();
     void moveToEndLine();
-    void appendToEndLine();
+    void beginInsertAfter();
+    void endInsertAfter();
 
 public:
     void addNewLine();
@@ -24,6 +25,8 @@ public:
 
 public:
     const Cursor& cursor() const { return m_cursor; }
+    int currentRow() const { return m_cursor.row(); }
+    int currentCol() const { return m_cursor.col(); }
     int lineCount() { return m_buffer.lineCount(); }
     const std::string& currentLine() const { return m_buffer.getText(m_cursor.row()); };
     const std::vector<std::string>& lines() const { return m_buffer.lines(); }

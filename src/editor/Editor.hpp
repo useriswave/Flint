@@ -26,14 +26,16 @@ public:
     void moveLeft();
     void moveToStartOfLine();
     void moveToEndOfLine();
-    void insertAtStartOfLine();
-    void appendToEndOfLine();
 
 public:
     void addNewLine();
     void deleteCharacter();
     void outputCharacter(int key);
     void resetCursor();
+
+public:
+    void shiftCursorRight();
+    void shiftCursorLeft();
 
 public:
     void setMode(ModeType mode);

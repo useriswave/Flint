@@ -8,7 +8,7 @@ void InsertMode::execute(Editor& editor, int key)
     switch (key) {
         case EditorKeys::ESCAPE:
             editor.setMode(ModeType::normal);
-            editor.moveLeft();
+            editor.shiftCursorLeft();
             break;
 
         case EditorKeys::ENTER:

@@ -85,6 +85,6 @@ void Cursor::reset()
 
 bool Cursor::atBeginning()
 {
-    return (m_col == 0 && m_savedCol == 0) && m_row == 0;
+    return m_col == 0 && m_row == 0;
 }
 

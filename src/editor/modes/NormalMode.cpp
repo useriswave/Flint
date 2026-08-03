@@ -26,7 +26,7 @@ void NormalMode::execute(Editor& editor, int key)
 
         case 'a':
             editor.setMode(ModeType::insert);
-            editor.moveRight();
+            editor.shiftCursorRight();
             break;
 
         case '$':
@@ -38,11 +38,14 @@ void NormalMode::execute(Editor& editor, int key)
             break;
 
         case 'A':
-            editor.appendToEndOfLine();
+            editor.moveToEndOfLine();
+            editor.setMode(ModeType::insert);
+            editor.shiftCursorRight();
             break;
 
         case 'I':
-            editor.insertAtStartOfLine();
+            editor.moveToStartOfLine();
+            editor.setMode(ModeType::insert);
             break;
 
         case EditorKeys::CTRL_S:

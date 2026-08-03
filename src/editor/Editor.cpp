@@ -9,7 +9,6 @@ void Editor::handleInput(int key)
 {
     m_mode->execute(*this, key);
     // m_screen.drawStatusLine(m_controller.cursor());
-    m_screen.refreshScreen();
 }
 
 bool Editor::isOpen() const noexcept
@@ -19,7 +18,7 @@ bool Editor::isOpen() const noexcept
 
 void Editor::init()
 {
-    m_screen.refreshViewport(m_controller.cursor().row(), m_controller.cursor().col(), m_controller.lines());
+    m_screen.refreshAll(m_controller.currentRow(), m_controller.currentCol(), m_controller.lines());
     resetCursor();
     m_isOpen = true;
 }
@@ -60,20 +59,6 @@ void Editor::moveToEndOfLine()
     m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
-void Editor::insertAtStartOfLine()
-{
-    m_controller.moveToStartLine();
-    setMode(ModeType::insert);
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
-}
-
-void Editor::appendToEndOfLine()
-{
-    m_controller.appendToEndLine();
-    setMode(ModeType::insert);
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
-}
-
 void Editor::setMode(ModeType mode)
 {
     switch (mode) {
@@ -94,27 +79,42 @@ void Editor::setMode(ModeType mode)
 void Editor::addNewLine()
 {
     m_controller.addNewLine();
-     //m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
-     m_screen.refreshViewport(m_controller.cursor().row(), m_controller.cursor().col(), m_controller.lines());
-    // m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
+    m_screen.refreshAll(m_controller.currentRow(), m_controller.currentCol(), m_controller.lines());
 }
 
 void Editor::outputCharacter(const int key)
 {
     m_controller.addCharacter(key);
-    m_screen.refreshLine(m_controller.cursor().row(), m_controller.cursor().col(), m_controller.currentLine());
+    m_screen.refreshLine(m_controller.currentRow(), m_controller.currentCol(), m_controller.currentLine());
 }
 
 void Editor::deleteCharacter()
 {
+    auto rowBefore{ m_controller.cursor().row() };
     m_controller.backspace();
-    m_screen.refreshViewport(m_controller.cursor().row(), m_controller.cursor().col(), m_controller.lines());
-    // m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
+
+    if (m_controller.cursor().row() == rowBefore) {
+        m_screen.refreshLine(m_controller.currentRow(), m_controller.currentCol(), m_controller.currentLine());
+    } else {
+        m_screen.refreshAll(m_controller.currentRow(), m_controller.currentCol(), m_controller.lines());
+    }
 }
 
 void Editor::resetCursor()
 {
     m_controller.resetCursor();
+}
+
+void Editor::shiftCursorRight()
+{
+    m_controller.beginInsertAfter();
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
+}
+
+void Editor::shiftCursorLeft()
+{
+    m_controller.endInsertAfter();
+    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::saveFile()

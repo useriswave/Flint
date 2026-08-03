@@ -18,11 +18,14 @@ public:
     void drawCharacter(const Cursor& cursor, int c);
 
 public:
-    void refreshAll(const Cursor& cursor, const std::vector<std::string>& lines);
-    void refreshViewport(int row, int col, const std::vector<std::string>& lines);
+    void refreshAll(int row, int col, const std::vector<std::string>& lines);
     void refreshLine(int row, int col, const std::string& line);
     void refreshCursor(const Cursor& cursor, const std::string& line);
     void refreshScreen();
+
+public:
+    void drawCursorRight(const Cursor& cursor);
+    void drawCursorLeft(const Cursor& cursor);
 
 private:
     std::string expandTabs(std::string::const_iterator start, std::string::const_iterator end);

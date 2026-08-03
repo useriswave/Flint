@@ -19,21 +19,12 @@ void Screen::drawCharacter(const Cursor& cursor, const int c)
     mvaddch(cursor.row(), cursor.col(), c);
 }
 
-void Screen::refreshAll(const Cursor& cursor, const std::vector<std::string>& lines)
-{
-    for (std::size_t i{}; i < lines.size(); ++i) {
-        refreshLine(i, 0, lines[i]);
-    }
-
-    move(cursor.row(), screenCol(lines[cursor.row()], cursor.col()));
-}
-
-void Screen::refreshViewport(const int row, const int col, const std::vector<std::string>& lines)
+void Screen::refreshAll(const int row, const int col, const std::vector<std::string>& lines)
 {
     erase();
 
     for (std::size_t i{}; i < lines.size(); ++i) {
-        std::string expanded{ expandTabs(lines[i].begin(), lines[i].end()) };
+        std::string expanded{ std::move(expandTabs(lines[i].begin(), lines[i].end())) };
         mvaddstr(i, 0, expanded.c_str());
     }
 
@@ -47,7 +38,7 @@ void Screen::refreshViewport(const int row, const int col, const std::vector<std
 
 void Screen::refreshLine(const int row, const int col, const std::string& line)
 {
-    std::string expanded{ expandTabs(line.begin(), line.end()) };
+    std::string expanded{ std::move(expandTabs(line.begin(), line.end())) };
 
     move(row, 0);
 
@@ -75,9 +66,23 @@ void Screen::drawStatusLine(const Cursor& cursor)
     int height = getHeight();
     move(height - 1, 0);
     clrtoeol();
-    mvaddstr(height - 1, 0, std::format("---R{}:COL{}---", row, col).c_str());
+    mvaddstr(height - 1, 0, std::format("-R{}:COL{}-", row, col).c_str());
 
     move(row, col);
+}
+
+void Screen::drawCursorRight(const Cursor& cursor)
+{
+    if (cursor.col() > 0) {
+        move(cursor.row(), cursor.col() + 5);
+    }
+}
+
+void Screen::drawCursorLeft(const Cursor& cursor)
+{
+    if (cursor.col() > 0) {
+        move(cursor.row(), cursor.col() - 5);
+    }
 }
 
 std::string Screen::expandTabs(std::string::const_iterator start, std::string::const_iterator end)
@@ -86,7 +91,7 @@ std::string Screen::expandTabs(std::string::const_iterator start, std::string::c
 
     for (auto it{ start }; it < end; ++it) {
         if (*it == '\t') {
-            expanded.append(4, ' ');
+            expanded.append(TAB_WIDTH, ' ');
         } else {
             expanded += *it;
         }

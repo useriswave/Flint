@@ -12,7 +12,6 @@ void EditingController::moveDown()
 
 void EditingController::moveRight()
 {
-
     m_motions.moveRight(m_cursor, m_buffer);
 }
 
@@ -31,9 +30,18 @@ void EditingController::moveToEndLine()
     m_motions.moveToEndOfLine(m_cursor, m_buffer);
 }
 
-void EditingController::appendToEndLine()
+void EditingController::beginInsertAfter()
 {
-    m_motions.moveToAppendEOL(m_cursor, m_buffer);
+    if (!currentLine().empty() && m_cursor.col() < static_cast<int>(currentLine().length())) {
+        m_cursor.incrementCol();
+    }
+}
+
+void EditingController::endInsertAfter()
+{
+    if (m_cursor.col() > 0) {
+        m_cursor.decrementCol();
+    }
 }
 
 void EditingController::addNewLine()
@@ -43,10 +51,10 @@ void EditingController::addNewLine()
     moveToStartLine();
 }
 
-void EditingController::addCharacter(int c)
+void EditingController::addCharacter(const int c)
 {
     m_buffer.insertCharacter(m_cursor.row(), m_cursor.col(), c);
-    m_motions.moveRight(m_cursor, m_buffer);
+    m_cursor.incrementCol();
 }
 
 void EditingController::backspace()
@@ -60,13 +68,15 @@ void EditingController::backspace()
         int currentRow{ m_cursor.row() };
 
         m_cursor.decrementRow();
-        m_motions.moveToAppendEOL(m_cursor, m_buffer);
+        m_motions.moveToEndOfLine(m_cursor, m_buffer);
+        beginInsertAfter();
         m_buffer.mergeLines(currentRow, currentCol);
 
-    } else {
-        m_buffer.removeCharacter(m_cursor.row(), m_cursor.col() - 1);
-        m_motions.moveLeft(m_cursor, m_buffer);
+        return;
     }
+
+    m_buffer.removeCharacter(m_cursor.row(), m_cursor.col() - 1);
+    m_motions.moveLeft(m_cursor, m_buffer);
 }
 
 void EditingController::resetCursor()
