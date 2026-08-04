@@ -8,7 +8,7 @@
 void Editor::handleInput(int key)
 {
     m_mode->execute(*this, key);
-    m_screen.drawStatusLine(m_controller.cursor(), m_controller.currentLine());
+    m_screen.update(m_controller.cursor(), m_controller.lines());
 }
 
 bool Editor::isOpen() const noexcept
@@ -18,47 +18,39 @@ bool Editor::isOpen() const noexcept
 
 void Editor::init()
 {
-    m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
     resetCursor();
     m_isOpen = true;
+    m_screen.update(m_controller.cursor(), m_controller.lines());
 }
 
 void Editor::moveUp()
 {
     m_controller.moveUp();
-    m_screen.fitViewport(m_controller.cursor(), m_controller.lines());
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveDown()
 {
     m_controller.moveDown();
-    m_screen.fitViewport(m_controller.cursor(), m_controller.lines());
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveRight()
 {
     m_controller.moveRight();
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveLeft()
 {
     m_controller.moveLeft();
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveToStartOfLine()
 {
     m_controller.moveToStartLine();
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveToEndOfLine()
 {
     m_controller.moveToEndLine();
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::setMode(ModeType mode)
@@ -81,25 +73,17 @@ void Editor::setMode(ModeType mode)
 void Editor::addNewLine()
 {
     m_controller.addNewLine();
-    m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
 }
 
 void Editor::outputCharacter(const int key)
 {
     m_controller.addCharacter(key);
-    m_screen.refreshLine(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::deleteCharacter()
 {
     auto rowBefore{ m_controller.cursor().row() };
     m_controller.backspace();
-
-    if (m_controller.cursor().row() == rowBefore) {
-        m_screen.refreshLine(m_controller.cursor(), m_controller.currentLine());
-    } else {
-        m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
-    }
 }
 
 void Editor::resetCursor()
@@ -110,13 +94,11 @@ void Editor::resetCursor()
 void Editor::shiftCursorRight()
 {
     m_controller.beginInsertAfter();
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::shiftCursorLeft()
 {
     m_controller.endInsertAfter();
-    m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::saveFile()
