@@ -8,7 +8,7 @@
 void Editor::handleInput(int key)
 {
     m_mode->execute(*this, key);
-    // m_screen.drawStatusLine(m_controller.cursor());
+    m_screen.drawStatusLine(m_controller.cursor(), m_controller.currentLine());
 }
 
 bool Editor::isOpen() const noexcept
@@ -18,7 +18,7 @@ bool Editor::isOpen() const noexcept
 
 void Editor::init()
 {
-    m_screen.refreshAll(m_controller.currentRow(), m_controller.currentCol(), m_controller.lines());
+    m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
     resetCursor();
     m_isOpen = true;
 }
@@ -26,12 +26,14 @@ void Editor::init()
 void Editor::moveUp()
 {
     m_controller.moveUp();
+    m_screen.fitViewport(m_controller.cursor(), m_controller.lines());
     m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::moveDown()
 {
     m_controller.moveDown();
+    m_screen.fitViewport(m_controller.cursor(), m_controller.lines());
     m_screen.refreshCursor(m_controller.cursor(), m_controller.currentLine());
 }
 
@@ -79,13 +81,13 @@ void Editor::setMode(ModeType mode)
 void Editor::addNewLine()
 {
     m_controller.addNewLine();
-    m_screen.refreshAll(m_controller.currentRow(), m_controller.currentCol(), m_controller.lines());
+    m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
 }
 
 void Editor::outputCharacter(const int key)
 {
     m_controller.addCharacter(key);
-    m_screen.refreshLine(m_controller.currentRow(), m_controller.currentCol(), m_controller.currentLine());
+    m_screen.refreshLine(m_controller.cursor(), m_controller.currentLine());
 }
 
 void Editor::deleteCharacter()
@@ -94,9 +96,9 @@ void Editor::deleteCharacter()
     m_controller.backspace();
 
     if (m_controller.cursor().row() == rowBefore) {
-        m_screen.refreshLine(m_controller.currentRow(), m_controller.currentCol(), m_controller.currentLine());
+        m_screen.refreshLine(m_controller.cursor(), m_controller.currentLine());
     } else {
-        m_screen.refreshAll(m_controller.currentRow(), m_controller.currentCol(), m_controller.lines());
+        m_screen.refreshAll(m_controller.cursor(), m_controller.lines());
     }
 }
 

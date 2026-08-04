@@ -22,7 +22,7 @@ public:
     void reset();
 
 public:
-    bool atBeginning();
+    bool atBeginning() const noexcept;
 
 private:
     int m_row{};

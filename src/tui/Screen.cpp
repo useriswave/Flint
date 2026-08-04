@@ -14,29 +14,40 @@ int Screen::getWidth()
     return getmaxx(stdscr);
 }
 
-void Screen::drawCharacter(const Cursor& cursor, const int c)
+void Screen::fitViewport(const Cursor& cursor, const std::vector<std::string>& lines)
 {
-    mvaddch(cursor.row(), cursor.col(), c);
+    int bottomLine{ m_topLine + getHeight() - 1 };
+
+    if (cursor.row() < m_topLine) {
+        m_topLine = cursor.row();
+        refreshAll(cursor, lines);
+    }
+
+    if (cursor.row() > bottomLine) {
+        m_topLine = cursor.row() - getHeight() + 1;
+        refreshAll(cursor, lines);
+    }
 }
 
-void Screen::refreshAll(const int row, const int col, const std::vector<std::string>& lines)
+void Screen::refreshAll(const Cursor& cursor, const std::vector<std::string>& lines)
 {
     erase();
 
     for (std::size_t i{}; i < lines.size(); ++i) {
-        std::string expanded{ std::move(expandTabs(lines[i].begin(), lines[i].end())) };
-        mvaddstr(i, 0, expanded.c_str());
+        drawLine(i, lines[i]);
     }
 
-    for (std::size_t i{ lines.size() }; i < getHeight(); ++i) {
-        mvaddch(static_cast<int>(i), 0, '~');
-    }
-
-    move(row, screenCol(lines[row], col));
-    refresh();
+    drawTildes(lines.size(), getHeight());
+    move(screenRow(cursor), screenCol(lines[cursor.row()], cursor.col()));
 }
 
-void Screen::refreshLine(const int row, const int col, const std::string& line)
+void Screen::refreshLine(const Cursor& cursor, const std::string& line)
+{
+    drawLine(cursor.row(), line);
+    move(screenRow(cursor), screenCol(line, cursor.col()));
+}
+
+void Screen::drawLine(const int row, const std::string& line) const
 {
     std::string expanded{ std::move(expandTabs(line.begin(), line.end())) };
 
@@ -44,13 +55,11 @@ void Screen::refreshLine(const int row, const int col, const std::string& line)
 
     clrtoeol();
     mvaddstr(row, 0, expanded.c_str());
-
-    move(row, screenCol(line, col));
 }
 
 void Screen::refreshCursor(const Cursor& cursor, const std::string& line)
 {
-    move(cursor.row(), screenCol(line, cursor.col()));
+    move(screenRow(cursor), screenCol(line, cursor.col()));
 }
 
 void Screen::refreshScreen()
@@ -58,34 +67,16 @@ void Screen::refreshScreen()
     refresh();
 }
 
-void Screen::drawStatusLine(const Cursor& cursor)
+void Screen::drawStatusLine(const Cursor& cursor, const std::string& line)
 {
-    int row{ cursor.row() };
-    int col{ cursor.col() };
-
-    int height = getHeight();
-    move(height - 1, 0);
+    move(getHeight() - 1, 0);
     clrtoeol();
-    mvaddstr(height - 1, 0, std::format("-R{}:COL{}-", row, col).c_str());
+    mvaddstr(getHeight() - 1, 0, std::format("-R{}:COL{}-", cursor.row(), cursor.col()).c_str());
 
-    move(row, col);
+    move(screenRow(cursor), screenCol(line, cursor.col()));
 }
 
-void Screen::drawCursorRight(const Cursor& cursor)
-{
-    if (cursor.col() > 0) {
-        move(cursor.row(), cursor.col() + 5);
-    }
-}
-
-void Screen::drawCursorLeft(const Cursor& cursor)
-{
-    if (cursor.col() > 0) {
-        move(cursor.row(), cursor.col() - 5);
-    }
-}
-
-std::string Screen::expandTabs(std::string::const_iterator start, std::string::const_iterator end)
+std::string Screen::expandTabs(std::string::const_iterator start, std::string::const_iterator end) const
 {
     std::string expanded{};
 
@@ -100,8 +91,20 @@ std::string Screen::expandTabs(std::string::const_iterator start, std::string::c
     return expanded;
 }
 
-int Screen::screenCol(const std::string& line, const int col)
+void Screen::drawTildes(const std::size_t start, const std::size_t end) const
+{
+    for (std::size_t i{ start }; i < end; ++i) {
+        mvaddch(i, 0, '~');
+    }
+}
+
+int Screen::screenCol(const std::string& line, const int col) const
 {
     return static_cast<int>(expandTabs(line.begin(), line.begin() + col).length());
+}
+
+int Screen::screenRow(const Cursor& cursor) const
+{
+    return cursor.row() - m_topLine;
 }
 

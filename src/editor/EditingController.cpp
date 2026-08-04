@@ -71,7 +71,6 @@ void EditingController::backspace()
         m_motions.moveToEndOfLine(m_cursor, m_buffer);
         beginInsertAfter();
         m_buffer.mergeLines(currentRow, currentCol);
-
         return;
     }
 

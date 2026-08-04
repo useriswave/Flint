@@ -83,7 +83,7 @@ void Cursor::reset()
     setCol(0);
 }
 
-bool Cursor::atBeginning()
+bool Cursor::atBeginning() const noexcept
 {
     return m_col == 0 && m_row == 0;
 }

@@ -18,6 +18,7 @@ void App::init()
     noecho();
     keypad(stdscr, true);
     set_escdelay(25);
+    scrollok(stdscr, true);
 
     refresh();
 }
