@@ -12,23 +12,20 @@
 class Editor
 {
 public:
-    Editor() = default; /*{ init(); } */
-
-public:
     [[nodiscard]] bool isOpen() const noexcept;
     void init();
     void handleInput(const int key);
 
 public:
-    void moveUp();
-    void moveDown();
-    void moveRight();
-    void moveLeft();
-    void moveToStartOfLine();
-    void moveToEndOfLine();
+    void navigateUp();
+    void navigateDown();
+    void navigateRight();
+    void navigateLeft();
+    void navigateStartLine();
+    void navigateEndLine();
 
 public:
-    void addNewLine();
+    void outputNewLine();
     void deleteCharacter();
     void outputCharacter(int key);
     void resetCursor();

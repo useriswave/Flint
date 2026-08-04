@@ -5,12 +5,6 @@
 
 #include <memory>
 
-void Editor::handleInput(int key)
-{
-    m_mode->execute(*this, key);
-    m_screen.update(m_controller.cursor(), m_controller.lines());
-}
-
 bool Editor::isOpen() const noexcept
 {
     return m_isOpen;
@@ -23,34 +17,40 @@ void Editor::init()
     m_screen.update(m_controller.cursor(), m_controller.lines());
 }
 
-void Editor::moveUp()
+void Editor::handleInput(int key)
+{
+    m_mode->execute(*this, key);
+    m_screen.update(m_controller.cursor(), m_controller.lines());
+}
+
+void Editor::navigateUp()
 {
     m_controller.moveUp();
 }
 
-void Editor::moveDown()
+void Editor::navigateDown()
 {
     m_controller.moveDown();
 }
 
-void Editor::moveRight()
+void Editor::navigateRight()
 {
     m_controller.moveRight();
 }
 
-void Editor::moveLeft()
+void Editor::navigateLeft()
 {
     m_controller.moveLeft();
 }
 
-void Editor::moveToStartOfLine()
+void Editor::navigateStartLine()
 {
-    m_controller.moveToStartLine();
+    m_controller.moveStartLine();
 }
 
-void Editor::moveToEndOfLine()
+void Editor::navigateEndLine()
 {
-    m_controller.moveToEndLine();
+    m_controller.moveEndLine();
 }
 
 void Editor::setMode(ModeType mode)
@@ -70,7 +70,7 @@ void Editor::setMode(ModeType mode)
     }
 }
 
-void Editor::addNewLine()
+void Editor::outputNewLine()
 {
     m_controller.addNewLine();
 }
@@ -83,7 +83,7 @@ void Editor::outputCharacter(const int key)
 void Editor::deleteCharacter()
 {
     auto rowBefore{ m_controller.cursor().row() };
-    m_controller.backspace();
+    m_controller.removeCharacter();
 }
 
 void Editor::resetCursor()

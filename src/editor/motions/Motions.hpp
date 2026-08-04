@@ -7,14 +7,14 @@
 class Motions
 {
 public:
-    void moveUp(Cursor& cursor, const Buffer& buffer);
-    void moveDown(Cursor& cursor, const Buffer& buffer);
-    void moveRight(Cursor& cursor, const Buffer& buffer);
-    void moveLeft(Cursor& cursor, const Buffer& buffer);
+    void up(Cursor& cursor, const Buffer& buffer);
+    void down(Cursor& cursor, const Buffer& buffer);
+    void right(Cursor& cursor, const Buffer& buffer);
+    void left(Cursor& cursor, const Buffer& buffer);
 
 public:
-    void moveToEndOfLine(Cursor& cursor, const Buffer& buffer);
-    void moveToStartOfLine(Cursor& cursor, const Buffer& buffer);
+    void endLine(Cursor& cursor, const Buffer& buffer);
+    void startLine(Cursor& cursor, const Buffer& buffer);
 };
 
 #endif

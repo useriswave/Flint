@@ -2,32 +2,32 @@
 
 void EditingController::moveUp()
 {
-    m_motions.moveUp(m_cursor, m_buffer);
+    m_motions.up(m_cursor, m_buffer);
 }
 
 void EditingController::moveDown()
 {
-    m_motions.moveDown(m_cursor, m_buffer);
+    m_motions.down(m_cursor, m_buffer);
 }
 
 void EditingController::moveRight()
 {
-    m_motions.moveRight(m_cursor, m_buffer);
+    m_motions.right(m_cursor, m_buffer);
 }
 
 void EditingController::moveLeft()
 {
-    m_motions.moveLeft(m_cursor, m_buffer);
+    m_motions.left(m_cursor, m_buffer);
 }
 
-void EditingController::moveToStartLine()
+void EditingController::moveStartLine()
 {
-    m_motions.moveToStartOfLine(m_cursor, m_buffer);
+    m_motions.startLine(m_cursor, m_buffer);
 }
 
-void EditingController::moveToEndLine()
+void EditingController::moveEndLine()
 {
-    m_motions.moveToEndOfLine(m_cursor, m_buffer);
+    m_motions.endLine(m_cursor, m_buffer);
 }
 
 void EditingController::beginInsertAfter()
@@ -48,7 +48,7 @@ void EditingController::addNewLine()
 {
     m_buffer.insertNewLine(m_cursor.row(), m_cursor.col());
     moveDown();
-    moveToStartLine();
+    moveStartLine();
 }
 
 void EditingController::addCharacter(const int c)
@@ -57,7 +57,7 @@ void EditingController::addCharacter(const int c)
     m_cursor.incrementCol();
 }
 
-void EditingController::backspace()
+void EditingController::removeCharacter()
 {
     if (m_cursor.atBeginning())  {
         return;
@@ -68,14 +68,14 @@ void EditingController::backspace()
         int currentRow{ m_cursor.row() };
 
         m_cursor.decrementRow();
-        m_motions.moveToEndOfLine(m_cursor, m_buffer);
+        m_motions.endLine(m_cursor, m_buffer);
         beginInsertAfter();
         m_buffer.mergeLines(currentRow, currentCol);
         return;
     }
 
     m_buffer.removeCharacter(m_cursor.row(), m_cursor.col() - 1);
-    m_motions.moveLeft(m_cursor, m_buffer);
+    m_cursor.decrementCol();
 }
 
 void EditingController::resetCursor()

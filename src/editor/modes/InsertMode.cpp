@@ -12,7 +12,7 @@ void InsertMode::execute(Editor& editor, int key)
             break;
 
         case EditorKeys::ENTER:
-            editor.addNewLine();
+            editor.outputNewLine();
             break;
 
         case KEY_BACKSPACE:

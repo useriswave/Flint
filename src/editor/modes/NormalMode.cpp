@@ -5,19 +5,19 @@ void NormalMode::execute(Editor& editor, int key)
 {
     switch (key) {
         case 'k':
-            editor.moveUp();
+            editor.navigateUp();
             break;
 
         case 'j':
-            editor.moveDown();
+            editor.navigateDown();
             break;
 
         case 'h':
-            editor.moveLeft();
+            editor.navigateLeft();
             break;
 
         case 'l':
-            editor.moveRight();
+            editor.navigateRight();
             break;
 
         case 'i':
@@ -30,21 +30,21 @@ void NormalMode::execute(Editor& editor, int key)
             break;
 
         case '$':
-            editor.moveToEndOfLine();
+            editor.navigateEndLine();
             break;
 
         case '0':
-            editor.moveToStartOfLine();
+            editor.navigateStartLine();
             break;
 
         case 'A':
-            editor.moveToEndOfLine();
+            editor.navigateEndLine();
             editor.setMode(ModeType::insert);
             editor.shiftCursorRight();
             break;
 
         case 'I':
-            editor.moveToStartOfLine();
+            editor.navigateStartLine();
             editor.setMode(ModeType::insert);
             break;
 

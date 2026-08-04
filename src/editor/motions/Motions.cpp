@@ -1,6 +1,6 @@
 #include "editor/motions/Motions.hpp"
 
-void Motions::moveUp(Cursor& cursor, const Buffer& buffer)
+void Motions::up(Cursor& cursor, const Buffer& buffer)
 {
     if (cursor.row() > 0) {
         const auto& previousLine{ buffer.getText(cursor.row() - 1) };
@@ -11,7 +11,7 @@ void Motions::moveUp(Cursor& cursor, const Buffer& buffer)
     }
 }
 
-void Motions::moveDown(Cursor& cursor, const Buffer& buffer)
+void Motions::down(Cursor& cursor, const Buffer& buffer)
 {
     if (cursor.row() < static_cast<int>(buffer.lineCount()) - 1) {
         const auto& nextLine{ buffer.getText(cursor.row() + 1) };
@@ -22,19 +22,19 @@ void Motions::moveDown(Cursor& cursor, const Buffer& buffer)
     }
 }
 
-void Motions::moveRight(Cursor& cursor, const Buffer& buffer)
+void Motions::right(Cursor& cursor, const Buffer& buffer)
 {
     if (cursor.col() < static_cast<int>(buffer.getText(cursor.row()).length()) - 1) {
         cursor.incrementCol();
     }
 }
 
-void Motions::moveLeft(Cursor& cursor, const Buffer& buffer)
+void Motions::left(Cursor& cursor, const Buffer& buffer)
 {
     cursor.decrementCol();
 }
 
-void Motions::moveToEndOfLine(Cursor& cursor, const Buffer& buffer)
+void Motions::endLine(Cursor& cursor, const Buffer& buffer)
 {
     const auto& line{ buffer.getText(cursor.row()) };
     const auto lineCols{ line.empty() ? 0 : static_cast<int>(buffer.getText(cursor.row()).length() - 1) };
@@ -44,7 +44,7 @@ void Motions::moveToEndOfLine(Cursor& cursor, const Buffer& buffer)
     }
 }
 
-void Motions::moveToStartOfLine(Cursor& cursor, const Buffer& buffer)
+void Motions::startLine(Cursor& cursor, const Buffer& buffer)
 {
     cursor.syncCols(0);
 }

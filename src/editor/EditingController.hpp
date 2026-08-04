@@ -12,15 +12,15 @@ public:
     void moveDown();
     void moveRight();
     void moveLeft();
-    void moveToStartLine();
-    void moveToEndLine();
+    void moveStartLine();
+    void moveEndLine();
     void beginInsertAfter();
     void endInsertAfter();
 
 public:
     void addNewLine();
     void addCharacter(int c);
-    void backspace();
+    void removeCharacter();
     void resetCursor();
 
 public:

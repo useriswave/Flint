@@ -23,8 +23,6 @@ void Screen::update(const Cursor& cursor, const std::vector<std::string>& lines)
 
 void Screen::fitViewport(const Cursor& cursor, const std::vector<std::string>& lines) const
 {
-    erase();
-
     int row{};
     int bufferRow{ m_viewport.top };
 
@@ -85,4 +83,3 @@ int Screen::screenRow(const Cursor& cursor) const
 {
     return cursor.row() - m_viewport.top;
 }
-
