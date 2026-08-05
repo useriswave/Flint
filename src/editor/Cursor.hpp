@@ -1,7 +1,7 @@
 #ifndef CURSOR_HPP
 #define CURSOR_HPP
 
-struct Cursor
+struct Cursor final
 {
 public:
     int row() const;

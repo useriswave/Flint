@@ -5,7 +5,7 @@
 #include "editor/history/commands/ICommand.hpp"
 #include "editor/history/EditRecord.hpp"
 
-class AddCharacterCommand : public ICommand
+class AddCharacterCommand final : public ICommand
 {
 public:
     AddCharacterCommand(EditingController& controller, int character)

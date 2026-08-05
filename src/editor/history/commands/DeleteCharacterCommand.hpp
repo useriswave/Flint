@@ -5,7 +5,7 @@
 #include "editor/history/commands/ICommand.hpp"
 #include "editor/history/EditRecord.hpp"
 
-class DeleteCharacterCommand : public ICommand
+class DeleteCharacterCommand final : public ICommand
 {
 public:
     DeleteCharacterCommand(EditingController& controller, int character)

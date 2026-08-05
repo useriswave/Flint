@@ -8,7 +8,7 @@
 
 using Commands = std::vector<std::unique_ptr<ICommand>>;
 
-class HistoryManager
+class HistoryManager final
 {
 public:
     void execute(std::unique_ptr<ICommand> command);

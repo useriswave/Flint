@@ -3,8 +3,6 @@
 #include <stdexcept>
 #include <format>
 
-// TODO:: fix tabs. when tab is pressed, moveRight is triggered. but it shuold be x4 (write tests)
-
 void Buffer::insertNewLine(const int row, const int col)
 {
     if (row < 0 || row > m_lines.size()) {
@@ -136,9 +134,4 @@ const std::string& Buffer::getText(const int row) const
 std::size_t Buffer::lineCount() const
 {
     return m_lines.size();
-}
-
-std::size_t Buffer::getRemainingLines(const int row) const
-{
-    return -1;
 }

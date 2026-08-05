@@ -10,7 +10,7 @@
 
 #include <memory>
 
-class Editor
+class Editor final
 {
 public:
     [[nodiscard]] bool isOpen() const noexcept;
@@ -35,8 +35,8 @@ public:
     void redo();
 
 public:
-    void shiftCursorRight();
-    void shiftCursorLeft();
+    void beginInsertAfter();
+    void endInsertAfter();
     void resetCursor();
 
 public:

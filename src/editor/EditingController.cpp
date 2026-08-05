@@ -30,14 +30,14 @@ void EditingController::moveEndLine()
     m_motions.endLine(m_cursor, m_buffer);
 }
 
-void EditingController::beginInsertAfter()
+void EditingController::shiftCursorRight()
 {
     if (!currentLine().empty() && m_cursor.col() < static_cast<int>(currentLine().length())) {
         m_cursor.incrementCol();
     }
 }
 
-void EditingController::endInsertAfter()
+void EditingController::shiftCursorLeft()
 {
     if (m_cursor.col() > 0) {
         m_cursor.decrementCol();
@@ -107,6 +107,41 @@ void EditingController::setCursor(const Cursor& cursor)
     m_cursor = cursor;
 }
 
+const Cursor& EditingController::cursor() const
+{
+    return m_cursor;
+}
+
+int EditingController::currentRow() const
+{
+    return m_cursor.row();
+}
+
+int EditingController::currentCol() const
+{
+    return m_cursor.col();
+}
+
+int EditingController::lineCount() const
+{
+    return m_buffer.lineCount();
+}
+
+const std::string& EditingController::currentLine() const
+{
+    return m_buffer.getText(m_cursor.row());
+};
+
+const std::vector<std::string>& EditingController::lines() const
+{
+    return m_buffer.lines();
+}
+
+char EditingController::currentCharacter() const
+{
+    return currentLine().at(m_cursor.col() - 1);
+}
+
 void EditingController::mergeLines()
 {
     int currentCol{ m_cursor.col() };
@@ -114,7 +149,6 @@ void EditingController::mergeLines()
 
     m_cursor.decrementRow();
     m_motions.endLine(m_cursor, m_buffer);
-    beginInsertAfter();
+    shiftCursorRight();
     m_buffer.mergeLines(currentRow, currentCol);
 }
-

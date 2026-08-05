@@ -5,7 +5,7 @@
 #include "editor/buffer/Buffer.hpp"
 #include "editor/motions/Motions.hpp"
 
-class EditingController
+class EditingController final
 {
 public:
     void moveUp();
@@ -14,8 +14,8 @@ public:
     void moveLeft();
     void moveStartLine();
     void moveEndLine();
-    void beginInsertAfter();
-    void endInsertAfter();
+    void shiftCursorRight();
+    void shiftCursorLeft();
 
 public:
     void addNewLine();
@@ -30,13 +30,13 @@ public:
     void setCursor(const Cursor& cursor);
 
 public:
-    const Cursor& cursor() const { return m_cursor; }
-    int currentRow() const { return m_cursor.row(); }
-    int currentCol() const { return m_cursor.col(); }
-    int lineCount() { return m_buffer.lineCount(); }
-    const std::string& currentLine() const { return m_buffer.getText(m_cursor.row()); };
-    const std::vector<std::string>& lines() const { return m_buffer.lines(); }
-    char currentCharacter() { return currentLine().at(m_cursor.col() - 1); }
+    const Cursor& cursor() const;
+    int currentRow() const;
+    int currentCol() const;
+    int lineCount() const;
+    const std::string& currentLine() const;
+    const std::vector<std::string>& lines() const;
+    char currentCharacter() const;
 
 private:
     void mergeLines();

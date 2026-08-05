@@ -3,7 +3,7 @@
 
 #include "editor/modes/IMode.hpp"
 
-class InsertMode : public IMode
+class InsertMode final : public IMode
 {
 public:
     void execute(Editor& editor, int key) override;

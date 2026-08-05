@@ -24,15 +24,14 @@ public:
 
 public:
     const std::vector<std::string>& lines() const;
-    [[maybe_unused]] std::optional<std::string> previousLine(int row);
-    [[maybe_unused]] std::optional<std::string> nextLine(int row);
+    std::optional<std::string> previousLine(int row);
+    std::optional<std::string> nextLine(int row);
     std::optional<int> previousCols(int row);
     std::optional<int> nextCols(int row);
     int lineCols(int row);
     bool lineEmpty(int row);
     const std::string& getText(int row) const;
     std::size_t lineCount() const;
-    std::size_t getRemainingLines(int row) const;
 
 private:
     std::vector<std::string> m_lines{};

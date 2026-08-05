@@ -98,14 +98,14 @@ void Editor::redo()
     m_history.redo();
 }
 
-void Editor::shiftCursorRight()
+void Editor::beginInsertAfter()
 {
-    m_controller.beginInsertAfter();
+    m_controller.shiftCursorRight();
 }
 
-void Editor::shiftCursorLeft()
+void Editor::endInsertAfter()
 {
-    m_controller.endInsertAfter();
+    m_controller.shiftCursorLeft();
 }
 
 void Editor::resetCursor()
