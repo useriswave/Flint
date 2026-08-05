@@ -48,6 +48,14 @@ void NormalMode::execute(Editor& editor, int key)
             editor.setMode(ModeType::insert);
             break;
 
+        case 'u':
+            editor.undo();
+            break;
+
+        case 'r':
+            editor.redo();
+            break;
+
         case EditorKeys::CTRL_S:
             editor.saveFile();
             break;

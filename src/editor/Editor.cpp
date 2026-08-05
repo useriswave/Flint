@@ -2,6 +2,9 @@
 #include "editor/modes/InsertMode.hpp"
 #include "editor/modes/VisualMode.hpp"
 #include "editor/modes/ModeType.hpp"
+#include "editor/history/commands/AddNewLineCommand.hpp"
+#include "editor/history/commands/AddCharacterCommand.hpp"
+#include "editor/history/commands/DeleteCharacterCommand.hpp"
 
 #include <memory>
 
@@ -57,38 +60,42 @@ void Editor::setMode(ModeType mode)
 {
     switch (mode) {
         case ModeType::normal:
-            m_mode = std::move(std::make_unique<NormalMode>());
+            m_mode = std::make_unique<NormalMode>();
             break;
 
         case ModeType::visual:
-            m_mode = std::move(std::make_unique<VisualMode>());
+            m_mode = std::make_unique<VisualMode>();
             break;
 
         case ModeType::insert:
-            m_mode = std::move(std::make_unique<InsertMode>());
+            m_mode = std::make_unique<InsertMode>();
             break;
     }
 }
 
 void Editor::outputNewLine()
 {
-    m_controller.addNewLine();
+    m_history.execute(std::make_unique<AddNewLineCommand>(m_controller));
 }
 
 void Editor::outputCharacter(const int key)
 {
-    m_controller.addCharacter(key);
+    m_history.execute(std::make_unique<AddCharacterCommand>(m_controller, key));
 }
 
 void Editor::deleteCharacter()
 {
-    auto rowBefore{ m_controller.cursor().row() };
-    m_controller.removeCharacter();
+    m_history.execute(std::make_unique<DeleteCharacterCommand>(m_controller, m_controller.currentCharacter()));
 }
 
-void Editor::resetCursor()
+void Editor::undo()
 {
-    m_controller.resetCursor();
+    m_history.undo();
+}
+
+void Editor::redo()
+{
+    m_history.redo();
 }
 
 void Editor::shiftCursorRight()
@@ -99,6 +106,11 @@ void Editor::shiftCursorRight()
 void Editor::shiftCursorLeft()
 {
     m_controller.endInsertAfter();
+}
+
+void Editor::resetCursor()
+{
+    m_controller.resetCursor();
 }
 
 void Editor::saveFile()

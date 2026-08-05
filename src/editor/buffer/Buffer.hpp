@@ -17,6 +17,8 @@ public:
     void insertNewLine(int row, int col);
     void insertCharacter(int row, int col, int c);
     void removeCharacter(int row, int col);
+    void removeCharAt(int row, int col);
+    void addCharAt(int row, int col, int c);
     void removeLine(int row);
     void mergeLines(int row, int col);
 

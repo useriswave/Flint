@@ -10,6 +10,11 @@ set(
     editor/modes/VisualMode.cpp
     editor/EditingController.cpp
     editor/Editor.cpp
+    editor/history/commands/AddCharacterCommand.cpp
+    editor/history/commands/AddNewLineCommand.cpp
+    editor/history/commands/DeleteCharacterCommand.cpp
+    editor/history/commands/DeleteCharacterCommand.cpp
+    editor/history/HistoryManager.cpp
     persistence/FileHandler.cpp
     tui/Screen.cpp
 )

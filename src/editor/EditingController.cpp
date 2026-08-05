@@ -64,21 +64,57 @@ void EditingController::removeCharacter()
     }
 
     if (m_cursor.col() == 0) {
-        int currentCol{ m_cursor.col() };
-        int currentRow{ m_cursor.row() };
+        mergeLines();
+    } else {
+        m_buffer.removeCharacter(m_cursor.row(), m_cursor.col() - 1);
+        m_cursor.decrementCol();
+    }
+}
 
-        m_cursor.decrementRow();
-        m_motions.endLine(m_cursor, m_buffer);
-        beginInsertAfter();
-        m_buffer.mergeLines(currentRow, currentCol);
+void EditingController::addCharacterAt(const int row, const int col, const int c)
+{
+    m_buffer.insertCharacter(row, col, c);
+    m_cursor.incrementCol();
+}
+
+void EditingController::addNewLineAt(const int row, const int col)
+{
+    m_buffer.insertNewLine(row, col);
+    moveDown();
+    moveStartLine();
+}
+
+void EditingController::removeCharacterAt(const int row, const int col)
+{
+    if (row == 0 && col == 0) {
         return;
     }
 
-    m_buffer.removeCharacter(m_cursor.row(), m_cursor.col() - 1);
-    m_cursor.decrementCol();
+    if (m_cursor.col() == 0) {
+        mergeLines();
+    } else {
+        m_buffer.removeCharacter(row, col - 1);
+    }
 }
 
 void EditingController::resetCursor()
 {
     m_cursor.reset();
 }
+
+void EditingController::setCursor(const Cursor& cursor)
+{
+    m_cursor = cursor;
+}
+
+void EditingController::mergeLines()
+{
+    int currentCol{ m_cursor.col() };
+    int currentRow{ m_cursor.row() };
+
+    m_cursor.decrementRow();
+    m_motions.endLine(m_cursor, m_buffer);
+    beginInsertAfter();
+    m_buffer.mergeLines(currentRow, currentCol);
+}
+
