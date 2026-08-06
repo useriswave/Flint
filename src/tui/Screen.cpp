@@ -6,6 +6,7 @@
 
 void Screen::update(const Cursor& cursor, const std::vector<std::string>& lines)
 {
+    erase();
     m_height = getmaxy(stdscr);
     m_viewport.bottom = m_viewport.top + m_height - 2;
 

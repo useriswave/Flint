@@ -10,6 +10,7 @@ class AddNewLineCommand final : public ICommand
 public:
     AddNewLineCommand(EditingController& controller)
         : m_controller { controller }
+        , m_before { controller.cursor() }
     {}
 
 public:

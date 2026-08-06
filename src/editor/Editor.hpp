@@ -35,6 +35,9 @@ public:
     void redo();
 
 public:
+    void saveHistory();
+
+public:
     void beginInsertAfter();
     void endInsertAfter();
     void resetCursor();

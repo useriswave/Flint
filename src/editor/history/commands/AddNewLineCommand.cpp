@@ -2,7 +2,7 @@
 
 void AddNewLineCommand::execute()
 {
-    m_before = { m_controller.cursor() };
+    m_controller.setCursor(m_before.cursor);
     m_controller.addNewLine();
     m_after = { m_controller.cursor() };
 

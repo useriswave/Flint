@@ -90,7 +90,7 @@ void EditingController::removeCharacterAt(const int row, const int col)
         return;
     }
 
-    if (m_cursor.col() == 0) {
+    if (col == 0) {
         mergeLines();
     } else {
         m_buffer.removeCharacter(row, col - 1);

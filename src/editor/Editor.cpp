@@ -56,6 +56,11 @@ void Editor::navigateEndLine()
     m_controller.moveEndLine();
 }
 
+void Editor::saveHistory()
+{
+    m_history.commitCommands();
+}
+
 void Editor::setMode(ModeType mode)
 {
     switch (mode) {
@@ -75,17 +80,18 @@ void Editor::setMode(ModeType mode)
 
 void Editor::outputNewLine()
 {
-    m_history.execute(std::make_unique<AddNewLineCommand>(m_controller));
+    m_history.processCommand(std::make_unique<AddNewLineCommand>(m_controller));
+
 }
 
 void Editor::outputCharacter(const int key)
 {
-    m_history.execute(std::make_unique<AddCharacterCommand>(m_controller, key));
+    m_history.processCommand(std::make_unique<AddCharacterCommand>(m_controller, key));
 }
 
 void Editor::deleteCharacter()
 {
-    m_history.execute(std::make_unique<DeleteCharacterCommand>(m_controller, m_controller.currentCharacter()));
+    m_history.processCommand(std::make_unique<DeleteCharacterCommand>(m_controller, m_controller.currentCharacter()));
 }
 
 void Editor::undo()

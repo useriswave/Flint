@@ -9,6 +9,7 @@ void InsertMode::execute(Editor& editor, int key)
         case EditorKeys::ESCAPE:
             editor.setMode(ModeType::normal);
             editor.endInsertAfter();
+            editor.saveHistory();
             break;
 
         case EditorKeys::ENTER:

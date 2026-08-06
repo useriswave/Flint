@@ -15,6 +15,7 @@ set(
     editor/history/commands/DeleteCharacterCommand.cpp
     editor/history/commands/DeleteCharacterCommand.cpp
     editor/history/HistoryManager.cpp
+    editor/history/CommandGroup.cpp
     persistence/FileHandler.cpp
     tui/Screen.cpp
 )

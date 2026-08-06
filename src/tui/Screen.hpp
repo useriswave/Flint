@@ -4,7 +4,6 @@
 #include "editor/Cursor.hpp"
 #include "tui/Viewport.hpp"
 
-#include <ncurses.h>
 #include <string>
 #include <vector>
 

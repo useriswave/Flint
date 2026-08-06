@@ -9,8 +9,9 @@ class DeleteCharacterCommand final : public ICommand
 {
 public:
     DeleteCharacterCommand(EditingController& controller, int character)
-        : m_controller{ controller }
-        , m_character{ character }
+        : m_controller { controller }
+        , m_before { controller.cursor() }
+        , m_character { character }
     {}
 
 public:

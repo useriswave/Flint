@@ -2,7 +2,7 @@
 
 void AddCharacterCommand::execute()
 {
-    m_before = { m_controller.cursor() };
+    m_controller.setCursor(m_before.cursor);
     m_controller.addCharacter(m_character);
     m_after = { m_controller.cursor(), m_character };
 }
