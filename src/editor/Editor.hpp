@@ -2,6 +2,7 @@
 #define EDITOR_HPP
 
 #include "editor/EditingController.hpp"
+#include "persistence/FileHandler.hpp"
 #include "editor/modes/ModeType.hpp"
 #include "editor/modes/IMode.hpp"
 #include "editor/modes/NormalMode.hpp"
@@ -24,6 +25,7 @@ public:
     void navigateLeft();
     void navigateStartLine();
     void navigateEndLine();
+    void navigateFirstCharacter();
 
 public:
     void outputNewLine();
@@ -35,9 +37,6 @@ public:
     void redo();
 
 public:
-    void saveHistory();
-
-public:
     void beginInsertAfter();
     void endInsertAfter();
     void resetCursor();
@@ -46,13 +45,15 @@ public:
     void setMode(ModeType mode);
 
 public:
+    void openFile(const std::string& path);
     void saveFile();
-    void openFile();
+    void saveHistory();
     void close() noexcept;
 
 private:
     EditingController m_controller{};
     HistoryManager m_history{};
+    FileHandler m_fileHandler{};
     Screen m_screen{};
     ModeType m_modeType{ ModeType::normal };
     std::unique_ptr<IMode> m_mode{ std::make_unique<NormalMode>() };

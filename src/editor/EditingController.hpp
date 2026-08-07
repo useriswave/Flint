@@ -14,6 +14,7 @@ public:
     void moveLeft();
     void moveStartLine();
     void moveEndLine();
+    void moveToFirstChar();
     void shiftCursorRight();
     void shiftCursorLeft();
 
@@ -37,6 +38,9 @@ public:
     const std::string& currentLine() const;
     const std::vector<std::string>& lines() const;
     char currentCharacter() const;
+
+public:
+    void fillLines(std::vector<std::string>& lines);
 
 private:
     void mergeLines();

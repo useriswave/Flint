@@ -44,7 +44,7 @@ void NormalMode::execute(Editor& editor, int key)
             break;
 
         case 'I':
-            editor.navigateStartLine();
+            editor.navigateFirstCharacter();
             editor.setMode(ModeType::insert);
             break;
 

@@ -1,5 +1,7 @@
 #include "EditingController.hpp"
 
+#include <cassert>
+
 void EditingController::moveUp()
 {
     m_motions.up(m_cursor, m_buffer);
@@ -28,6 +30,11 @@ void EditingController::moveStartLine()
 void EditingController::moveEndLine()
 {
     m_motions.endLine(m_cursor, m_buffer);
+}
+
+void EditingController::moveToFirstChar()
+{
+    m_motions.firstCharacter(m_cursor, m_buffer);
 }
 
 void EditingController::shiftCursorRight()
@@ -73,6 +80,10 @@ void EditingController::removeCharacter()
 
 void EditingController::addCharacterAt(const int row, const int col, const int c)
 {
+    if (row >= m_buffer.lineCount()) {
+        m_buffer.insertNewLine(row, 0);
+    }
+
     m_buffer.insertCharacter(row, col, c);
     m_cursor.incrementCol();
 }
@@ -139,6 +150,10 @@ const std::vector<std::string>& EditingController::lines() const
 
 char EditingController::currentCharacter() const
 {
+    if (m_cursor.col() == 0) {
+        return {};
+    }
+
     return currentLine().at(m_cursor.col() - 1);
 }
 
@@ -152,3 +167,9 @@ void EditingController::mergeLines()
     shiftCursorRight();
     m_buffer.mergeLines(currentRow, currentCol);
 }
+
+void EditingController::fillLines(std::vector<std::string>& lines)
+{
+    m_buffer.setLines(lines);
+}
+

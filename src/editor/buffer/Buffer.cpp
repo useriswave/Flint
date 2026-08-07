@@ -2,6 +2,16 @@
 
 #include <stdexcept>
 #include <format>
+#include <utility>
+
+void Buffer::setLines(std::vector<std::string> lines)
+{
+    if (!lines.empty()) {
+        m_lines = lines;
+    } else {
+        m_lines.emplace_back("");
+    }
+}
 
 void Buffer::insertNewLine(const int row, const int col)
 {
@@ -135,3 +145,20 @@ std::size_t Buffer::lineCount() const
 {
     return m_lines.size();
 }
+
+std::size_t Buffer::firstCharacter(const int row, const int col) const
+{
+    const auto& line{ m_lines[row] };
+
+    auto alphanumeric{ std::find_if(line.begin(), line.end(), [&](char c) {
+        return std::isalnum(c);
+    })};
+
+    if (alphanumeric != line.end()) {
+        auto index{ std::distance(line.begin(), alphanumeric) };
+        return static_cast<std::size_t>(index);
+    }
+
+    return col;
+}
+

@@ -12,7 +12,6 @@ using Commands = std::vector<std::unique_ptr<ICommand>>;
 
 public:
     void executeAll();
-    void executeBack();
 
 public:
     void push(std::unique_ptr<ICommand> command);

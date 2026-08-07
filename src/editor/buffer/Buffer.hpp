@@ -8,10 +8,7 @@
 class Buffer
 {
 public:
-    Buffer()
-    {
-        m_lines.emplace_back("");
-    }
+    void setLines(std::vector<std::string> lines);
 
 public:
     void insertNewLine(int row, int col);
@@ -32,6 +29,7 @@ public:
     bool lineEmpty(int row);
     const std::string& getText(int row) const;
     std::size_t lineCount() const;
+    std::size_t firstCharacter(int row, int col) const;
 
 private:
     std::vector<std::string> m_lines{};

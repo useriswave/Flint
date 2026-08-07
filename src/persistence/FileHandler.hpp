@@ -7,10 +7,7 @@
 class FileHandler
 {
 public:
-    FileHandler() = default;
-
-public:
-    void openAndRead(const std::string& path, std::vector<std::string>& lines);
+    [[nodiscard]] std::vector<std::string> openAndRead(const std::string& path);
     void save(const std::vector<std::string>& lines);
 
 private:

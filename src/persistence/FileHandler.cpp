@@ -2,21 +2,26 @@
 
 #include <fstream>
 #include <string>
+#include <vector>
+#include <iostream>
 
-void FileHandler::openAndRead(const std::string& path, std::vector<std::string>& lines)
+std::vector<std::string> FileHandler::openAndRead(const std::string& path)
 {
-    m_path = path;
     std::ifstream inf{ path };
 
     if (!inf) {
         throw std::runtime_error{ "ERROR: Couldn't open file to read from" };
     }
 
+    m_path = std::move(path);
     std::string line{};
+    std::vector<std::string> lines{};
 
     while (getline(inf, line)) {
         lines.emplace_back(std::move(line));
     }
+
+    return lines;
 }
 
 void FileHandler::save(const std::vector<std::string>& lines)
@@ -28,6 +33,6 @@ void FileHandler::save(const std::vector<std::string>& lines)
     }
 
     for (const auto& line : lines) {
-        outf << line;
+        outf << line << '\n';
     }
 }

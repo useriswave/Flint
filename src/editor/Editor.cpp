@@ -56,6 +56,26 @@ void Editor::navigateEndLine()
     m_controller.moveEndLine();
 }
 
+void Editor::navigateFirstCharacter()
+{
+    m_controller.moveToFirstChar();
+}
+
+void Editor::openFile(const std::string& path)
+{
+    try {
+        auto lines{ m_fileHandler.openAndRead(path) };
+        m_controller.fillLines(lines);
+    } catch (std::runtime_error& e) {
+        throw;
+    }
+}
+
+void Editor::saveFile()
+{
+    m_fileHandler.save(m_controller.lines());
+}
+
 void Editor::saveHistory()
 {
     m_history.commitCommands();
@@ -119,15 +139,6 @@ void Editor::resetCursor()
     m_controller.resetCursor();
 }
 
-void Editor::saveFile()
-{
-    // m_fileHandler.save(m_buffer.lines());
-}
-
-void Editor::openFile()
-{
-    // m_fileHandler.openAndRead(const std::string &path, std::vector<std::string> &lines)
-}
 
 void Editor::close() noexcept
 {

@@ -8,7 +8,9 @@
 class App
 {
 public:
-    App() = default;
+    App(std::string path)
+        : m_path { path }
+    {}
 
     ~App()
     {
@@ -21,6 +23,7 @@ public:
 
 private:
     Editor m_editor{};
+    std::string m_path{};
 };
 
 #endif

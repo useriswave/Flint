@@ -4,8 +4,15 @@
 void App::start()
 {
     init();
-    m_editor.init();
 
+
+    try {
+        m_editor.openFile(m_path);
+    } catch (std::runtime_error& e) {
+        throw;
+    }
+
+    m_editor.init();
     while (m_editor.isOpen()) {
         m_editor.handleInput(getch());
     }

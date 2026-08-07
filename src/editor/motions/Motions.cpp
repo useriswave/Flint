@@ -1,4 +1,7 @@
 #include "editor/motions/Motions.hpp"
+#include <algorithm>
+#include <cctype>
+#include <iterator>
 
 void Motions::up(Cursor& cursor, const Buffer& buffer)
 {
@@ -47,4 +50,9 @@ void Motions::endLine(Cursor& cursor, const Buffer& buffer)
 void Motions::startLine(Cursor& cursor, const Buffer& buffer)
 {
     cursor.syncCols(0);
+}
+
+void Motions::firstCharacter(Cursor& cursor, const Buffer& buffer)
+{
+    cursor.setCol(static_cast<int>(buffer.firstCharacter(cursor.row(), cursor.col())));
 }
