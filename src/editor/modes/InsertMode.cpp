@@ -7,7 +7,7 @@ void InsertMode::execute(Editor& editor, int key)
 {
     switch (key) {
         case EditorKeys::ESCAPE:
-            editor.setMode(ModeType::normal);
+            editor.setMode(Mode::Type::normal);
             editor.endInsertAfter();
             editor.saveHistory();
             break;

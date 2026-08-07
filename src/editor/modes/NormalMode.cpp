@@ -21,11 +21,11 @@ void NormalMode::execute(Editor& editor, int key)
             break;
 
         case 'i':
-            editor.setMode(ModeType::insert);
+            editor.setMode(Mode::Type::insert);
             break;
 
         case 'a':
-            editor.setMode(ModeType::insert);
+            editor.setMode(Mode::Type::insert);
             editor.beginInsertAfter();
             break;
 
@@ -39,13 +39,13 @@ void NormalMode::execute(Editor& editor, int key)
 
         case 'A':
             editor.navigateEndLine();
-            editor.setMode(ModeType::insert);
+            editor.setMode(Mode::Type::insert);
             editor.beginInsertAfter();
             break;
 
         case 'I':
             editor.navigateFirstCharacter();
-            editor.setMode(ModeType::insert);
+            editor.setMode(Mode::Type::insert);
             break;
 
         case 'u':

@@ -7,7 +7,7 @@
 void Screen::update(const Cursor& cursor, const std::vector<std::string>& lines)
 {
     erase();
-    m_height = getmaxy(stdscr);
+    updateScreenSize();
     m_viewport.bottom = m_viewport.top + m_height - 2;
 
     if (cursor.row() < m_viewport.top) {
@@ -19,7 +19,6 @@ void Screen::update(const Cursor& cursor, const std::vector<std::string>& lines)
     }
 
     fitViewport(cursor, lines);
-    drawStatusLine(cursor, lines[cursor.row()]);
 }
 
 void Screen::fitViewport(const Cursor& cursor, const std::vector<std::string>& lines) const
@@ -44,11 +43,17 @@ void Screen::drawLine(const int row, const std::string& line) const
     mvaddstr(row, 0, expanded.c_str());
 }
 
-void Screen::drawStatusLine(const Cursor& cursor, const std::string& line) const
+void Screen::drawStatusLine(const Cursor& cursor, const std::string& line, const Mode::Type type) const
 {
     move(m_height - 1, 0);
     clrtoeol();
-    mvaddstr(m_height - 1, 0, std::format("-R{}:COL{}-", cursor.row(), cursor.col()).c_str());
+
+    attron(COLOR_PAIR(3));
+    mvaddstr(m_height - 1, 0, std::format("{}", Mode::toStr(type)).c_str());
+    attroff(COLOR_PAIR(3));
+
+    auto pos{ std::format("-{}:{}-", cursor.row(), cursor.col()) };
+    mvaddstr(m_height - 1, m_width - pos.length() , pos.c_str());
 
     move(screenRow(cursor), screenCol(line, cursor.col()));
 }
@@ -83,4 +88,9 @@ int Screen::screenCol(const std::string& line, const int col) const
 int Screen::screenRow(const Cursor& cursor) const
 {
     return cursor.row() - m_viewport.top;
+}
+
+void Screen::updateScreenSize()
+{
+    getmaxyx(stdscr, m_height, m_width);
 }

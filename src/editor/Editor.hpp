@@ -42,7 +42,7 @@ public:
     void resetCursor();
 
 public:
-    void setMode(ModeType mode);
+    void setMode(Mode::Type mode);
 
 public:
     void openFile(const std::string& path);
@@ -51,11 +51,14 @@ public:
     void close() noexcept;
 
 private:
+    void update();
+
+private:
     EditingController m_controller{};
     HistoryManager m_history{};
     FileHandler m_fileHandler{};
     Screen m_screen{};
-    ModeType m_modeType{ ModeType::normal };
+    Mode::Type m_modeType{ Mode::Type::normal };
     std::unique_ptr<IMode> m_mode{ std::make_unique<NormalMode>() };
     bool m_isOpen{};
 };

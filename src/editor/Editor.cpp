@@ -17,13 +17,13 @@ void Editor::init()
 {
     resetCursor();
     m_isOpen = true;
-    m_screen.update(m_controller.cursor(), m_controller.lines());
+    update();
 }
 
 void Editor::handleInput(int key)
 {
     m_mode->execute(*this, key);
-    m_screen.update(m_controller.cursor(), m_controller.lines());
+    update();
 }
 
 void Editor::navigateUp()
@@ -77,19 +77,22 @@ void Editor::saveHistory()
     m_history.commitCommands();
 }
 
-void Editor::setMode(ModeType mode)
+void Editor::setMode(Mode::Type mode)
 {
     switch (mode) {
-        case ModeType::normal:
+        case Mode::Type::normal:
             m_mode = std::make_unique<NormalMode>();
+            m_modeType = Mode::Type::normal;
             break;
 
-        case ModeType::visual:
+        case Mode::Type::visual:
             m_mode = std::make_unique<VisualMode>();
+            m_modeType = Mode::Type::visual;
             break;
 
-        case ModeType::insert:
+        case Mode::Type::insert:
             m_mode = std::make_unique<InsertMode>();
+            m_modeType = Mode::Type::insert;
             break;
     }
 }
@@ -141,4 +144,10 @@ void Editor::resetCursor()
 void Editor::close() noexcept
 {
     m_isOpen = false;
+}
+
+void Editor::update()
+{
+    m_screen.update(m_controller.cursor(), m_controller.lines());
+    m_screen.drawStatusLine(m_controller.cursor(), m_controller.currentLine(), m_modeType);
 }
