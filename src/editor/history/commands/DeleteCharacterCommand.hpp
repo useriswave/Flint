@@ -21,6 +21,7 @@ public:
 private:
     EditingController& m_controller;
     EditRecord m_before{};
+    EditRecord m_after{};
     int m_character{};
 };
 

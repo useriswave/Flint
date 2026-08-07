@@ -7,12 +7,12 @@ void HistoryManager::processCommand(std::unique_ptr<ICommand> command)
         return;
     }
 
-    command->execute();
-    m_group.push(std::move(command));
-
     if (m_group.isEmpty()) {
         m_redoStack.clear();
     }
+
+    command->execute();
+    m_group.push(std::move(command));
 }
 
 void HistoryManager::commitCommands()

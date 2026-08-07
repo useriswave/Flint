@@ -7,7 +7,7 @@
 void Buffer::setLines(std::vector<std::string> lines)
 {
     if (!lines.empty()) {
-        m_lines = lines;
+        m_lines = std::move(lines);
     } else {
         m_lines.emplace_back("");
     }

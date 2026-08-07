@@ -63,12 +63,8 @@ void Editor::navigateFirstCharacter()
 
 void Editor::openFile(const std::string& path)
 {
-    try {
-        auto lines{ m_fileHandler.openAndRead(path) };
-        m_controller.fillLines(lines);
-    } catch (std::runtime_error& e) {
-        throw;
-    }
+    auto lines{ m_fileHandler.openAndRead(path) };
+    m_controller.fillLines(lines);
 }
 
 void Editor::saveFile()
@@ -111,7 +107,9 @@ void Editor::outputCharacter(const int key)
 
 void Editor::deleteCharacter()
 {
-    m_history.processCommand(std::make_unique<DeleteCharacterCommand>(m_controller, m_controller.currentCharacter()));
+    if (!m_controller.cursor().atBeginning()) {
+        m_history.processCommand(std::make_unique<DeleteCharacterCommand>(m_controller, m_controller.currentCharacter()));
+    }
 }
 
 void Editor::undo()

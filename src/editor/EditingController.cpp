@@ -1,7 +1,5 @@
 #include "EditingController.hpp"
 
-#include <cassert>
-
 void EditingController::moveUp()
 {
     m_motions.up(m_cursor, m_buffer);
@@ -80,19 +78,16 @@ void EditingController::removeCharacter()
 
 void EditingController::addCharacterAt(const int row, const int col, const int c)
 {
-    if (row >= m_buffer.lineCount()) {
+    if (row == m_buffer.lineCount()) {
         m_buffer.insertNewLine(row, 0);
     }
 
     m_buffer.insertCharacter(row, col, c);
-    m_cursor.incrementCol();
 }
 
 void EditingController::addNewLineAt(const int row, const int col)
 {
     m_buffer.insertNewLine(row, col);
-    moveDown();
-    moveStartLine();
 }
 
 void EditingController::removeCharacterAt(const int row, const int col)
@@ -102,7 +97,7 @@ void EditingController::removeCharacterAt(const int row, const int col)
     }
 
     if (col == 0) {
-        mergeLines();
+        m_buffer.mergeLines(row, 0);
     } else {
         m_buffer.removeCharacter(row, col - 1);
     }
@@ -150,11 +145,11 @@ const std::vector<std::string>& EditingController::lines() const
 
 char EditingController::currentCharacter() const
 {
-    if (m_cursor.col() == 0) {
-        return {};
+    if (m_cursor.col() > 0) {
+        return currentLine().at(m_cursor.col() - 1);
     }
 
-    return currentLine().at(m_cursor.col() - 1);
+    return {};
 }
 
 void EditingController::mergeLines()
