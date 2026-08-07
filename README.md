@@ -1,7 +1,15 @@
 ## Overview
 
-simple terminal based text editor written in C++ and ncurses.
-this project has only been tested in Linux so far.
+**simple terminal based text editor written in C++ and ncurses.**
+
+this project has only been tested in:  
+- CachyOS
+- Ubuntu
+
+## Requirements:
+- CMake with version 3.20 or above
+- C++20 capable compiler
+- ncurses (already pre-installed on most linux distros)
 ## Usage (running with tests off)
 
 In your terminal:
@@ -39,6 +47,6 @@ I use command line arguments for this text editor. You must provide a valid path
 #### Current Insert Mode Binds:
 - Backspace: Delete a character
 - Enter: Add a new line
-- Esc: Return to Normal Mode
+- Esc: Toggle Normal Mode
 
 **NOTE: Pressing arrow keys to navigate in insert mode won't work because arrow keys are lame!**
