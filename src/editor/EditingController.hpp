@@ -4,6 +4,7 @@
 #include "editor/Cursor.hpp"
 #include "editor/buffer/Buffer.hpp"
 #include "editor/motions/Motions.hpp"
+#include "persistence/FileHandler.hpp"
 
 class EditingController final
 {
@@ -28,6 +29,10 @@ public:
     void resetCursor();
 
 public:
+    void openFile(const std::string& path);
+    void saveFile();
+
+public:
     void setCursor(const Cursor& cursor);
 
 public:
@@ -39,13 +44,12 @@ public:
     const std::vector<std::string>& lines() const;
     char currentCharacter() const;
 
-public:
-    void fillLines(std::vector<std::string>& lines);
-
 private:
+    void fillLines(std::vector<std::string> lines);
     void mergeLines();
 
 private:
+    FileHandler m_fileHandler{};
     Buffer m_buffer{};
     Cursor m_cursor{};
     Motions m_motions{};

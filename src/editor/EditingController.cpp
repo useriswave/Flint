@@ -163,8 +163,18 @@ void EditingController::mergeLines()
     m_buffer.mergeLines(currentRow, currentCol);
 }
 
-void EditingController::fillLines(std::vector<std::string>& lines)
+void EditingController::openFile(const std::string& path)
 {
-    m_buffer.setLines(lines);
+    fillLines(m_fileHandler.openAndRead(path));
+}
+
+void EditingController::saveFile()
+{
+    m_fileHandler.save(m_buffer.lines());
+}
+
+void EditingController::fillLines(std::vector<std::string> lines)
+{
+    m_buffer.setLines(std::move(lines));
 }
 

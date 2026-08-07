@@ -2,7 +2,6 @@
 #define EDITOR_HPP
 
 #include "editor/EditingController.hpp"
-#include "persistence/FileHandler.hpp"
 #include "editor/modes/ModeType.hpp"
 #include "editor/modes/IMode.hpp"
 #include "editor/modes/NormalMode.hpp"
@@ -56,7 +55,6 @@ private:
 private:
     EditingController m_controller{};
     HistoryManager m_history{};
-    FileHandler m_fileHandler{};
     Screen m_screen{};
     Mode::Type m_modeType{ Mode::Type::normal };
     std::unique_ptr<IMode> m_mode{ std::make_unique<NormalMode>() };

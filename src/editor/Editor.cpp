@@ -63,13 +63,12 @@ void Editor::navigateFirstCharacter()
 
 void Editor::openFile(const std::string& path)
 {
-    auto lines{ m_fileHandler.openAndRead(path) };
-    m_controller.fillLines(lines);
+    m_controller.openFile(path);
 }
 
 void Editor::saveFile()
 {
-    m_fileHandler.save(m_controller.lines());
+    m_controller.saveFile();
 }
 
 void Editor::saveHistory()
