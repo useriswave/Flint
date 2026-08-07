@@ -6,6 +6,10 @@ this project has only been tested in:
 - CachyOS
 - Ubuntu
 
+
+<video src="https://github.com/user-attachments/assets/cb9d8f81-633b-4f94-b07d-de0055d53f70" width="200" controls></video>
+
+
 ## Requirements:
 - CMake with version 3.20 or above
 - C++20 capable compiler
