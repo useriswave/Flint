@@ -6,9 +6,7 @@ this project has only been tested in:
 - CachyOS
 - Ubuntu
 
-
-<video src="https://github.com/user-attachments/assets/cb9d8f81-633b-4f94-b07d-de0055d53f70" width="200" controls></video>
-
+[<video src="https://github.com/user-attachments/assets/cb9d8f81-633b-4f94-b07d-de0055d53f70" width="200" controls></video>](https://github.com/user-attachments/assets/bcbc3674-11a2-47f9-a4d7-05fe772a0def)
 
 ## Requirements:
 - CMake with version 3.20 or above
