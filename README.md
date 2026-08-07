@@ -1,6 +1,44 @@
-# Flint  
-<img width="256" height="256" alt="flint" src="https://github.com/user-attachments/assets/ae411d69-a9b0-4272-bd27-406c76649567" />    
-
 ## Overview
 
-Flint is a terminal based Vim inspired text editor written in C++.
+simple terminal based text editor written in C++ and ncurses.
+this project has only been tested in Linux so far.
+## Usage (running with tests off)
+
+In your terminal:
+```
+git clone https://github.com/useriswave/Flint.git
+cd Flint
+cmake -S . -B build -DBUILD_TESTING=OFF
+cmake --build build/ -j
+./build/src/Flint tests/files/empty.txt
+```
+## Note:  
+I use command line arguments for this text editor. You must provide a valid path to a file as the second argument to be able to edit its content with this text editor. More flexibility will be implemented later.
+## Example:
+```
+./build/src/Flint your/path/file.txt
+```
+
+## How to use:
+#### Current Normal Mode Binds:
+- h: Move left
+- j: Move down
+- k: Move up
+- l: Move right
+- 0: Move to the start of the line
+- $: Move to the end of the line
+- i: Insert before the cursor
+- a: Insert after the cursor
+- I: Insert at the start of the line before the first character
+- A: Append at the end of the line
+- u: Undo
+- r: Redo (will be changed to CTRL+R soon)
+- Ctrl + s: Save
+- Ctrl + q: Quit
+
+#### Current Insert Mode Binds:
+- Backspace: Delete a character
+- Enter: Add a new line
+- Esc: Return to Normal Mode
+
+**NOTE: Pressing arrow keys to navigate in insert mode won't work because arrow keys are lame!**
