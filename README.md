@@ -10,7 +10,7 @@ this project has only been tested in:
 
 ## Requirements:
 - CMake with version 3.20 or above
-- C++20 capable compiler
+- C++23 capable compiler
 - ncurses (already pre-installed on most linux distros)
 ## Usage (running with tests off)
 
