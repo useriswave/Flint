@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <optional>
 
 class Buffer
 {
@@ -21,10 +20,6 @@ public:
 
 public:
     const std::vector<std::string>& lines() const;
-    std::optional<std::string> previousLine(int row);
-    std::optional<std::string> nextLine(int row);
-    std::optional<int> previousCols(int row);
-    std::optional<int> nextCols(int row);
     int lineCols(int row);
     bool lineEmpty(int row);
     const std::string& getText(int row) const;

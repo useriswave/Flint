@@ -88,24 +88,6 @@ void Buffer::mergeLines(const int row, const int col)
     m_lines.erase(m_lines.begin() + row);
 }
 
-std::optional<std::string> Buffer::previousLine(const int row)
-{
-    if (row < 0 || row > m_lines.size() - 1) {
-        throw std::out_of_range{ std::format("ERROR Buffer::previousLine(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
-    }
-
-    return row == 0 ? std::nullopt : std::optional<std::string>(m_lines[row - 1]);
-}
-
-std::optional<std::string> Buffer::nextLine(int row)
-{
-    if (row < 0 || row > m_lines.size() - 1) {
-        throw std::out_of_range{ std::format("ERROR Buffer::nextLine(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
-    }
-
-    return row == m_lines.size() - 1 ? std::nullopt : std::optional<std::string>(m_lines[row + 1]);
-}
-
 int Buffer::lineCols(const int row)
 {
     if (row < 0 || row > m_lines.size() - 1) {
@@ -113,18 +95,6 @@ int Buffer::lineCols(const int row)
     }
 
     return static_cast<int>(m_lines[row].length()) - 1;
-}
-
-std::optional<int> Buffer::previousCols(const int row)
-{
-    const auto& line{ previousLine(row) };
-    return line ? std::optional<int>(static_cast<int>(line->length()) - 1) : std::nullopt;
-}
-
-std::optional<int> Buffer::nextCols(const int row)
-{
-    const auto& line{ nextLine(row) };
-    return line ? std::optional<int>(static_cast<int>(line->length()) - 1) : std::nullopt;
 }
 
 const std::vector<std::string>& Buffer::lines() const

@@ -1,7 +1,5 @@
 #include "editor/motions/Motions.hpp"
 #include <algorithm>
-#include <cctype>
-#include <iterator>
 
 void Motions::up(Cursor& cursor, const Buffer& buffer)
 {
