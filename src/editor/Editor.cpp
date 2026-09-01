@@ -61,6 +61,11 @@ void Editor::navigateFirstCharacter()
     m_controller.moveToFirstChar();
 }
 
+void Editor::navigateNextWord()
+{
+    m_controller.moveNextWord();
+}
+
 void Editor::openFile(const std::string& path)
 {
     m_controller.openFile(path);

@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <format>
+#include <type_traits>
 #include <utility>
 
 void Buffer::setLines(std::vector<std::string> lines)
@@ -132,3 +133,46 @@ std::size_t Buffer::firstCharacter(const int row, const int col) const
     return col;
 }
 
+Internal::CharacterType Buffer::characterType(int c) const noexcept
+{
+    using namespace Internal;
+
+    if (std::isalpha(c)) {
+        return CharacterType::ALPHA;
+    }
+
+    if (std::isdigit(c)) {
+        return CharacterType::DIGIT;
+    }
+
+    if (std::isspace(c)) {
+        return CharacterType::SPACE;
+    }
+
+    return CharacterType::SPECIAL;
+}
+
+bool Buffer::isSpace(int c) const
+{
+    return characterType(c) == Internal::CharacterType::SPACE;
+}
+
+bool Buffer::isAlpha(int c) const
+{
+    return characterType(c) == Internal::CharacterType::ALPHA;
+}
+
+bool Buffer::isDigit(int c) const
+{
+    return characterType(c) == Internal::CharacterType::DIGIT;
+}
+
+bool Buffer::isSpecial(int c) const
+{
+    return characterType(c) == Internal::CharacterType::SPECIAL;
+}
+
+bool Buffer::isSameType(int firstChar, int secondChar) const
+{
+    return characterType(firstChar) == characterType(secondChar);
+}

@@ -35,6 +35,11 @@ void EditingController::moveToFirstChar()
     m_motions.firstCharacter(m_cursor, m_buffer);
 }
 
+void EditingController::moveNextWord()
+{
+    m_motions.nextWord(m_cursor, m_buffer);
+}
+
 void EditingController::shiftCursorRight()
 {
     if (!currentLine().empty() && m_cursor.col() < static_cast<int>(currentLine().length())) {

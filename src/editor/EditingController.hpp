@@ -16,6 +16,7 @@ public:
     void moveStartLine();
     void moveEndLine();
     void moveToFirstChar();
+    void moveNextWord();
     void shiftCursorRight();
     void shiftCursorLeft();
 

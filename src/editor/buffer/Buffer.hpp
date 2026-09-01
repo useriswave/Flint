@@ -4,6 +4,18 @@
 #include <vector>
 #include <string>
 
+namespace Internal {
+
+enum class CharacterType
+{
+    ALPHA,
+    DIGIT,
+    SPACE,
+    SPECIAL
+};
+
+}
+
 class Buffer
 {
 public:
@@ -19,9 +31,16 @@ public:
     void mergeLines(int row, int col);
 
 public:
+    Internal::CharacterType characterType(int c) const noexcept;
+    bool isSpace(int c) const;
+    bool isAlpha(int c) const;
+    bool isDigit(int c) const;
+    bool isSpecial(int c) const;
+    bool isSameType(int firstChar, int secondChar) const;
+
+public:
     const std::vector<std::string>& lines() const;
     int lineCols(int row);
-    bool lineEmpty(int row);
     const std::string& getText(int row) const;
     std::size_t lineCount() const;
     std::size_t firstCharacter(int row, int col) const;

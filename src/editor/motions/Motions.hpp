@@ -16,6 +16,7 @@ public:
     void endLine(Cursor& cursor, const Buffer& buffer);
     void startLine(Cursor& cursor, const Buffer& buffer);
     void firstCharacter(Cursor& cursor, const Buffer& buffer);
+    void nextWord(Cursor& cursor, const Buffer& buffer);
 };
 
 #endif

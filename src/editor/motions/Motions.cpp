@@ -54,3 +54,21 @@ void Motions::firstCharacter(Cursor& cursor, const Buffer& buffer)
 {
     cursor.setCol(static_cast<int>(buffer.firstCharacter(cursor.row(), cursor.col())));
 }
+
+void Motions::nextWord(Cursor& cursor, const Buffer& buffer)
+{
+    const auto& line{ buffer.getText(cursor.row()) };
+    const auto current{ line[cursor.col()] };
+    const auto currentType{ buffer.characterType(line[cursor.col()]) };
+
+    for (auto pos{0uz}; pos < line.size(); ++pos) {
+        auto nextPos { cursor.col() + (pos + 1) };
+        auto nextChar{ line[nextPos] };
+
+        if (!buffer.isSameType(current, nextChar) && !buffer.isSpace(nextChar)) {
+            cursor.syncCols(nextPos);
+            break;
+        }
+    }
+}
+
