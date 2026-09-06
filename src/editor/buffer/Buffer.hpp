@@ -33,18 +33,18 @@ public:
 
 public:
     Internal::CharacterType characterType(int c) const noexcept;
-    bool isSpace(int c) const;
-    bool isAlpha(int c) const;
-    bool isDigit(int c) const;
-    bool isSpecial(int c) const;
-    bool isSameType(int firstChar, int secondChar) const;
+    bool isSpace(int c) const noexcept;
+    bool isAlpha(int c) const noexcept;
+    bool isDigit(int c) const noexcept;
+    bool isSpecial(int c) const noexcept;
+    bool isSameType(int firstChar, int secondChar) const noexcept;
 
 public:
     const std::vector<std::string>& lines() const;
     int lineCols(int row);
     const std::string& getText(int row) const;
     std::size_t lineCount() const;
-    std::size_t firstCharacter(int row, int col) const;
+    int firstCharacter(int row, int col) const;
     std::pair<int, int> nextWordPos(int row, int col) const noexcept;
 
 private:

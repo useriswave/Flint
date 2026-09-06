@@ -52,7 +52,7 @@ void Motions::startLine(Cursor& cursor, const Buffer& buffer)
 
 void Motions::firstCharacter(Cursor& cursor, const Buffer& buffer)
 {
-    cursor.setCol(static_cast<int>(buffer.firstCharacter(cursor.row(), cursor.col())));
+    cursor.syncCols(static_cast<int>(buffer.firstCharacter(cursor.row(), cursor.col())));
 }
 
 void Motions::nextWord(Cursor& cursor, const Buffer& buffer)

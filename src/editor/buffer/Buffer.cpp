@@ -116,84 +116,70 @@ std::size_t Buffer::lineCount() const
     return m_lines.size();
 }
 
-std::size_t Buffer::firstCharacter(const int row, const int col) const
+int Buffer::firstCharacter(const int row, const int col) const
 {
     const auto& line{ m_lines[row] };
 
     auto alphanumeric{ std::find_if(line.begin(), line.end(), [&](char c) {
-        return std::isalnum(c);
+        return isAlpha(c) || isSpecial(c);
     })};
 
     if (alphanumeric != line.end()) {
         auto index{ std::distance(line.begin(), alphanumeric) };
-        return static_cast<std::size_t>(index);
+        return static_cast<int>(index);
     }
 
     return col;
 }
 
-Internal::CharacterType Buffer::characterType(int c) const noexcept
-{
-    using namespace Internal;
-
-    if (std::isalpha(c)) {
-        return CharacterType::ALPHA;
-    }
-
-    if (std::isdigit(c)) {
-        return CharacterType::DIGIT;
-    }
-
-    if (std::isspace(c)) {
-        return CharacterType::SPACE;
-    }
-
-    return CharacterType::SPECIAL;
-}
-
-bool Buffer::isSpace(int c) const
-{
-    return characterType(c) == Internal::CharacterType::SPACE;
-}
-
-bool Buffer::isAlpha(int c) const
-{
-    return characterType(c) == Internal::CharacterType::ALPHA;
-}
-
-bool Buffer::isDigit(int c) const
-{
-    return characterType(c) == Internal::CharacterType::DIGIT;
-}
-
-bool Buffer::isSpecial(int c) const
-{
-    return characterType(c) == Internal::CharacterType::SPECIAL;
-}
-
-bool Buffer::isSameType(int firstChar, int secondChar) const
-{
-    return characterType(firstChar) == characterType(secondChar);
-}
-
 std::pair<int, int> Buffer::nextWordPos(int row, int col) const noexcept
 {
-    const auto& line { m_lines[row] };
+    for (auto y{ row }; y < m_lines.size(); ++y) {
+        const auto& line { m_lines[y] };
 
-    for (auto i{ col }; i < line.size(); ++i) {
-        if (isSpace(line[i])) {
-            for (auto j{ i+1 }; j < line.size() - 1; ++j) {
-                if (!isSpace(line[j])) {
-                    return std::make_pair(row, j);
+        for (auto x{ col }; x < line.size(); ++x) {
+            if (isSpace(line[x])) {
+                for (auto j{ x+1 }; j < line.size() - 1; ++j) {
+                    if (!isSpace(line[j])) {
+                        return std::make_pair(y, j);
+                    }
                 }
+            }
+
+            if (!isSameType(line[x], line[x+1]) && !isSpace(line[x+1]) && line[x+1]) {
+                return std::make_pair(y, x+1);
             }
         }
 
-        if (!isSameType(line[i], line[i+1]) && !isSpace(line[i+1])) {
-            return std::make_pair(row, i+1);
+        if (y+1 <= m_lines.size() - 1) {
+            return std::make_pair(++y, 0);
+        } else {
+            return std::make_pair(y, line.size() - 1);
         }
     }
 
     return std::make_pair(row, col);
 }
 
+Internal::CharacterType Buffer::characterType(int c) const noexcept
+{
+    if (std::isalpha(c)) {
+        return Internal::CharacterType::ALPHA;
+    }
+
+    if (std::isdigit(c)) {
+        return Internal::CharacterType::DIGIT;
+    }
+
+    if (std::isspace(c)) {
+        return Internal::CharacterType::SPACE;
+    }
+
+    return Internal::CharacterType::SPECIAL;
+}
+
+bool Buffer::isSpace(int c) const noexcept { return characterType(c) == Internal::CharacterType::SPACE; }
+bool Buffer::isAlpha(int c) const noexcept { return characterType(c) == Internal::CharacterType::ALPHA; }
+bool Buffer::isDigit(int c) const noexcept { return characterType(c) == Internal::CharacterType::DIGIT; }
+bool Buffer::isSpecial(int c) const noexcept { return characterType(c) == Internal::CharacterType::SPECIAL; }
+bool Buffer::isSameType(int firstChar, int secondChar) const noexcept { return characterType(firstChar) == characterType(secondChar); }
