@@ -5,12 +5,12 @@
 
 int Cursor::row() const
 {
-    return m_row;
+    return m_position.row;
 }
 
 int Cursor::col() const
 {
-    return m_col;
+    return m_position.col;
 }
 
 int Cursor::savedCol() const
@@ -21,25 +21,25 @@ int Cursor::savedCol() const
 void Cursor::setCol(int col)
 {
     if (col < 0) {
-        throw std::runtime_error{ std::format("ERROR Cursor::setCol(): Cursor column cannot be < 0: {}", m_col) };
+        throw std::runtime_error{ std::format("ERROR Cursor::setCol(): Cursor column cannot be < 0: {}", m_position.col) };
     }
 
-    m_col = col;
+    m_position.col = col;
 }
 
 void Cursor::setRow(int row)
 {
     if (row < 0) {
-        throw std::runtime_error{ std::format("ERROR Cursor::setRow(): Cursor row cannot be < 0: {}", m_col) };
+        throw std::runtime_error{ std::format("ERROR Cursor::setRow(): Cursor row cannot be < 0: {}", m_position.col) };
     }
 
-    m_row = row;
+    m_position.row = row;
 }
 
 void Cursor::setSavedCol(int col)
 {
     if (col < 0) {
-        throw std::runtime_error{ std::format("ERROR Cursor::setCol(): Cursor column cannot be < 0: {}", m_col) };
+        throw std::runtime_error{ std::format("ERROR Cursor::setCol(): Cursor column cannot be < 0: {}", m_position.col) };
     }
 
     m_savedCol = col;
@@ -47,7 +47,7 @@ void Cursor::setSavedCol(int col)
 
 void Cursor::syncCols(int col)
 {
-    m_col = col;
+    m_position.col = col;
     m_savedCol = col;
 }
 
@@ -59,27 +59,27 @@ void Cursor::move(int row, int col)
 
 void Cursor::incrementCol()
 {
-    ++m_col;
-    m_savedCol = m_col;
+    ++m_position.col;
+    m_savedCol = m_position.col;
 }
 
 void Cursor::decrementCol()
 {
-    if (m_col > 0) {
-        --m_col;
-        m_savedCol = m_col;
+    if (m_position.col > 0) {
+        --m_position.col;
+        m_savedCol = m_position.col;
     }
 }
 
 void Cursor::incrementRow()
 {
-    ++m_row;
+    ++m_position.row;
 }
 
 void Cursor::decrementRow()
 {
-    if (m_row > 0) {
-        --m_row;
+    if (m_position.row > 0) {
+        --m_position.row;
     }
 }
 
@@ -91,6 +91,6 @@ void Cursor::reset()
 
 bool Cursor::atBeginning() const noexcept
 {
-    return m_col == 0 && m_row == 0;
+    return m_position.col == 0 && m_position.row == 0;
 }
 

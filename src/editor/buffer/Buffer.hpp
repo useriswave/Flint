@@ -1,6 +1,8 @@
 #ifndef BUFFER_HPP
 #define BUFFER_HPP
 
+#include "editor/Position.hpp"
+
 #include <utility>
 #include <vector>
 #include <string>
@@ -45,7 +47,12 @@ public:
     const std::string& getText(int row) const;
     std::size_t lineCount() const;
     int firstCharacter(int row, int col) const;
-    std::pair<int, int> nextWordPos(int row, int col) const noexcept;
+    Position nextWordPos(int row, int col) const noexcept;
+
+private:
+    Position findNonSpaceCharacter(int row, int col) const noexcept;
+    bool isWord(int row, int col) const noexcept;
+    Position validWordVertically(int row) const noexcept;
 
 private:
     std::vector<std::string> m_lines{};

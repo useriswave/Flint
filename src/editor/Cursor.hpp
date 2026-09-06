@@ -1,6 +1,8 @@
 #ifndef CURSOR_HPP
 #define CURSOR_HPP
 
+#include "editor/Position.hpp"
+
 struct Cursor final
 {
 public:
@@ -26,8 +28,7 @@ public:
     bool atBeginning() const noexcept;
 
 private:
-    int m_row{};
-    int m_col{};
+    Position m_position{};
     int m_savedCol{};
 };
 

@@ -132,33 +132,55 @@ int Buffer::firstCharacter(const int row, const int col) const
     return col;
 }
 
-std::pair<int, int> Buffer::nextWordPos(int row, int col) const noexcept
+Position Buffer::nextWordPos(int row, int col) const noexcept
 {
     for (auto y{ row }; y < m_lines.size(); ++y) {
         const auto& line { m_lines[y] };
 
         for (auto x{ col }; x < line.size(); ++x) {
             if (isSpace(line[x])) {
-                for (auto j{ x+1 }; j < line.size() - 1; ++j) {
-                    if (!isSpace(line[j])) {
-                        return std::make_pair(y, j);
-                    }
-                }
+                findNonSpaceCharacter(y, x);
             }
 
-            if (!isSameType(line[x], line[x+1]) && !isSpace(line[x+1]) && line[x+1]) {
-                return std::make_pair(y, x+1);
+            if (isWord(y, x)) {
+                return { y, x+1 };
             }
         }
 
-        if (y+1 <= m_lines.size() - 1) {
-            return std::make_pair(++y, 0);
-        } else {
-            return std::make_pair(y, line.size() - 1);
+        return validWordVertically(y);
+    }
+
+    return { row, col };
+}
+
+Position Buffer::findNonSpaceCharacter(int row, int col) const noexcept
+{
+    const auto& line { m_lines[row] };
+
+    for (auto j{ col+1 }; j < line.size() - 1; ++j) {
+        if (!isSpace(line[j])) {
+            return { row, j };
         }
     }
 
-    return std::make_pair(row, col);
+    return { row, col };
+}
+
+bool Buffer::isWord(int row, int col) const noexcept
+{
+    const auto& line { m_lines[row] };
+    return !isSameType(line[col], line[col+1]) && !isSpace(line[col+1]) && line[col+1];
+}
+
+Position Buffer::validWordVertically(int row) const noexcept
+{
+    const auto& line { m_lines[row] };
+
+    if (row+1 <= m_lines.size() - 1) {
+        return { ++row, 0 };
+    } else {
+        return { row, static_cast<int>(line.size() - 1) };
+    }
 }
 
 Internal::CharacterType Buffer::characterType(int c) const noexcept

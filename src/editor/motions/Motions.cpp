@@ -58,6 +58,6 @@ void Motions::firstCharacter(Cursor& cursor, const Buffer& buffer)
 void Motions::nextWord(Cursor& cursor, const Buffer& buffer)
 {
     const auto newPos { buffer.nextWordPos(cursor.row(), cursor.col()) };
-    cursor.move(newPos.first, newPos.second);
+    cursor.move(newPos.row, newPos.col);
 }
 
