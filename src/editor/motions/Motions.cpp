@@ -57,18 +57,7 @@ void Motions::firstCharacter(Cursor& cursor, const Buffer& buffer)
 
 void Motions::nextWord(Cursor& cursor, const Buffer& buffer)
 {
-    const auto& line{ buffer.getText(cursor.row()) };
-    const auto current{ line[cursor.col()] };
-    const auto currentType{ buffer.characterType(line[cursor.col()]) };
-
-    for (auto pos{0uz}; pos < line.size(); ++pos) {
-        auto nextPos { cursor.col() + (pos + 1) };
-        auto nextChar{ line[nextPos] };
-
-        if (!buffer.isSameType(current, nextChar) && !buffer.isSpace(nextChar)) {
-            cursor.syncCols(nextPos);
-            break;
-        }
-    }
+    const auto newPos { buffer.nextWordPos(cursor.row(), cursor.col()) };
+    cursor.move(newPos.first, newPos.second);
 }
 

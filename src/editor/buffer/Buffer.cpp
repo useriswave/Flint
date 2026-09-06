@@ -2,7 +2,6 @@
 
 #include <stdexcept>
 #include <format>
-#include <type_traits>
 #include <utility>
 
 void Buffer::setLines(std::vector<std::string> lines)
@@ -176,3 +175,25 @@ bool Buffer::isSameType(int firstChar, int secondChar) const
 {
     return characterType(firstChar) == characterType(secondChar);
 }
+
+std::pair<int, int> Buffer::nextWordPos(int row, int col) const noexcept
+{
+    const auto& line { m_lines[row] };
+
+    for (auto i{ col }; i < line.size(); ++i) {
+        if (isSpace(line[i])) {
+            for (auto j{ i+1 }; j < line.size() - 1; ++j) {
+                if (!isSpace(line[j])) {
+                    return std::make_pair(row, j);
+                }
+            }
+        }
+
+        if (!isSameType(line[i], line[i+1]) && !isSpace(line[i+1])) {
+            return std::make_pair(row, i+1);
+        }
+    }
+
+    return std::make_pair(row, col);
+}
+

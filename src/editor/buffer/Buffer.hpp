@@ -1,6 +1,7 @@
 #ifndef BUFFER_HPP
 #define BUFFER_HPP
 
+#include <utility>
 #include <vector>
 #include <string>
 
@@ -44,6 +45,7 @@ public:
     const std::string& getText(int row) const;
     std::size_t lineCount() const;
     std::size_t firstCharacter(int row, int col) const;
+    std::pair<int, int> nextWordPos(int row, int col) const noexcept;
 
 private:
     std::vector<std::string> m_lines{};

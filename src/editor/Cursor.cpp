@@ -51,6 +51,12 @@ void Cursor::syncCols(int col)
     m_savedCol = col;
 }
 
+void Cursor::move(int row, int col)
+{
+    setRow(row);
+    syncCols(col);
+}
+
 void Cursor::incrementCol()
 {
     ++m_col;

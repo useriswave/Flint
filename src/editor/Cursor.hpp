@@ -13,6 +13,7 @@ public:
     void setRow(int row);
     void setSavedCol(int col);
     void syncCols(int col);
+    void move(int row, int col);
 
 public:
     void incrementCol();
