@@ -40,6 +40,11 @@ void EditingController::moveNextWord()
     m_motions.nextWord(m_cursor, m_buffer);
 }
 
+void EditingController::movePreviousWord()
+{
+    m_motions.previousWord(m_cursor, m_buffer);
+}
+
 void EditingController::shiftCursorRight()
 {
     if (!currentLine().empty() && m_cursor.col() < static_cast<int>(currentLine().length())) {

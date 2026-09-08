@@ -24,6 +24,10 @@ void NormalMode::execute(Editor& editor, int key)
             editor.navigateNextWord();
             break;
 
+        case 'b':
+            editor.navigatePreviousWord();
+            break;
+
         case 'i':
             editor.setMode(Mode::Type::insert);
             break;

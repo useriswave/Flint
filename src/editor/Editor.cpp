@@ -66,6 +66,11 @@ void Editor::navigateNextWord()
     m_controller.moveNextWord();
 }
 
+void Editor::navigatePreviousWord()
+{
+    m_controller.movePreviousWord();
+}
+
 void Editor::openFile(const std::string& path)
 {
     m_controller.openFile(path);

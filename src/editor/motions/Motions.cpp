@@ -57,7 +57,13 @@ void Motions::firstCharacter(Cursor& cursor, const Buffer& buffer)
 
 void Motions::nextWord(Cursor& cursor, const Buffer& buffer)
 {
-    const auto newPos { buffer.nextWordPos(cursor.row(), cursor.col()) };
-    cursor.move(newPos.row, newPos.col);
+    const auto[row, col] { buffer.nextWordPos(cursor.row(), cursor.col()) };
+    cursor.move(row, col);
+}
+
+void Motions::previousWord(Cursor& cursor, const Buffer& buffer)
+{
+    const auto[row, col] { buffer.previousWordPos(cursor.row(), cursor.col()) };
+    cursor.move(row, col);
 }
 

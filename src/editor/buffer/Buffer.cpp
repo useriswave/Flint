@@ -139,7 +139,7 @@ Position Buffer::nextWordPos(int row, int col) const noexcept
 
         for (auto x{ col }; x < line.size(); ++x) {
             if (isSpace(line[x])) {
-                findNonSpaceCharacter(y, x);
+                findNonSpaceCharacterFront(y, x);
             }
 
             if (isWord(y, x)) {
@@ -147,13 +147,34 @@ Position Buffer::nextWordPos(int row, int col) const noexcept
             }
         }
 
-        return validWordVertically(y);
+        return validWordVerticalFront(y);
     }
 
     return { row, col };
 }
 
-Position Buffer::findNonSpaceCharacter(int row, int col) const noexcept
+Position Buffer::previousWordPos(int row, int col) const noexcept
+{
+    for (auto y{ row }; y >= firstCharacter(row, col); --y) {
+        const auto& line { m_lines[y] };
+
+        for (auto x{ col }; x >= firstCharacter(row, col); --x) {
+            if (isSpace(line[x])) {
+                findNonSpaceCharacterBack(y, x);
+            }
+
+            if (isWord(y, x)) {
+                return { y, x-1 };
+            }
+        }
+
+        return validWordVerticalBack(y);
+    }
+
+    return { row, col };
+}
+
+Position Buffer::findNonSpaceCharacterFront(int row, int col) const noexcept
 {
     const auto& line { m_lines[row] };
 
@@ -166,13 +187,7 @@ Position Buffer::findNonSpaceCharacter(int row, int col) const noexcept
     return { row, col };
 }
 
-bool Buffer::isWord(int row, int col) const noexcept
-{
-    const auto& line { m_lines[row] };
-    return !isSameType(line[col], line[col+1]) && !isSpace(line[col+1]) && line[col+1];
-}
-
-Position Buffer::validWordVertically(int row) const noexcept
+Position Buffer::validWordVerticalFront(int row) const noexcept
 {
     const auto& line { m_lines[row] };
 
@@ -181,6 +196,36 @@ Position Buffer::validWordVertically(int row) const noexcept
     } else {
         return { row, static_cast<int>(line.size() - 1) };
     }
+}
+
+Position Buffer::findNonSpaceCharacterBack(int row, int col) const noexcept
+{
+    const auto& line { m_lines[row] };
+
+    for (auto j{ col-1 }; j < line.size() - 1; --j) {
+        if (!isSpace(line[j])) {
+            return { row, j };
+        }
+    }
+
+    return { row, col };
+}
+
+Position Buffer::validWordVerticalBack(int row) const noexcept
+{
+    const auto& line { m_lines[row] };
+
+    if (row-1 > 0) {
+        return { --row, 0 };
+    } else {
+        return { row, static_cast<int>(line.size() - 1) };
+    }
+}
+
+bool Buffer::isWord(int row, int col) const noexcept
+{
+    const auto& line { m_lines[row] };
+    return !isSameType(line[col], line[col+1]) && !isSpace(line[col+1]) && line[col+1];
 }
 
 Internal::CharacterType Buffer::characterType(int c) const noexcept

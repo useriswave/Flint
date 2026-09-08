@@ -8,9 +8,7 @@ int main(int argc, char* argv[])
         try {
             App app{ argv[1] };
             app.start();
-        } catch (std::out_of_range& e) {
-            std::cout << e.what();
-        } catch (std::runtime_error& e) {
+        } catch (const std::exception& e) {
             std::cout << e.what();
         }
     } else {

@@ -26,6 +26,7 @@ public:
     void navigateEndLine();
     void navigateFirstCharacter();
     void navigateNextWord();
+    void navigatePreviousWord();
 
 public:
     void outputNewLine();
