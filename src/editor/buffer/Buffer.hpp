@@ -33,7 +33,6 @@ public:
     void mergeLines(int row, int col);
 
 public:
-    Internal::CharacterType characterType(int c) const noexcept;
     bool isSpace(int c) const noexcept;
     bool isAlpha(int c) const noexcept;
     bool isDigit(int c) const noexcept;
@@ -43,19 +42,21 @@ public:
 public:
     const std::vector<std::string>& lines() const;
     int lineCols(int row);
-    const std::string& getText(int row) const;
+    std::string_view getText(int row) const;
     std::size_t lineCount() const;
-    int firstCharacter(int row, int col) const;
+    int firstCharacterPos(int row, int col) const;
     Position nextWordPos(int row, int col) const noexcept;
     Position previousWordPos(int row, int col) const noexcept;
+
+private:
+    Internal::CharacterType characterType(int c) const noexcept;
+    bool isWord(int row, int col) const noexcept;
 
 private:
     Position findNonSpaceCharacterFront(int row, int col) const noexcept;
     Position validWordVerticalFront(int row) const noexcept;
     Position findNonSpaceCharacterBack(int row, int col) const noexcept;
     Position validWordVerticalBack(int row) const noexcept;
-
-    bool isWord(int row, int col) const noexcept;
 
 private:
     std::vector<std::string> m_lines{};

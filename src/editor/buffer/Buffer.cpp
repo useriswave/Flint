@@ -102,10 +102,10 @@ const std::vector<std::string>& Buffer::lines() const
     return m_lines;
 }
 
-const std::string& Buffer::getText(const int row) const
+std::string_view Buffer::getText(const int row) const
 {
     if (row < 0 || row >= m_lines.size()) {
-        throw std::out_of_range{ std::format("ERROR Buffer::getText(): cursor row is out of range: {} out of {}", row, m_lines.size() - 1) };
+        throw std::out_of_range{ std::format("ERROR {}: cursor row is out of range: {} out of {}", __PRETTY_FUNCTION__, row, m_lines.size() - 1) };
     }
 
     return m_lines[row];
@@ -116,7 +116,7 @@ std::size_t Buffer::lineCount() const
     return m_lines.size();
 }
 
-int Buffer::firstCharacter(const int row, const int col) const
+int Buffer::firstCharacterPos(const int row, const int col) const
 {
     const auto& line{ m_lines[row] };
 
@@ -155,10 +155,10 @@ Position Buffer::nextWordPos(int row, int col) const noexcept
 
 Position Buffer::previousWordPos(int row, int col) const noexcept
 {
-    for (auto y{ row }; y >= firstCharacter(row, col); --y) {
+    for (auto y{ row }; y >= firstCharacterPos(row, col); --y) {
         const auto& line { m_lines[y] };
 
-        for (auto x{ col }; x >= firstCharacter(row, col); --x) {
+        for (auto x{ col }; x >= firstCharacterPos(row, col); --x) {
             if (isSpace(line[x])) {
                 findNonSpaceCharacterBack(y, x);
             }
@@ -193,9 +193,9 @@ Position Buffer::validWordVerticalFront(int row) const noexcept
 
     if (row+1 <= m_lines.size() - 1) {
         return { ++row, 0 };
-    } else {
-        return { row, static_cast<int>(line.size() - 1) };
     }
+
+    return { row, static_cast<int>(line.size() - 1) };
 }
 
 Position Buffer::findNonSpaceCharacterBack(int row, int col) const noexcept
@@ -217,9 +217,9 @@ Position Buffer::validWordVerticalBack(int row) const noexcept
 
     if (row-1 > 0) {
         return { --row, 0 };
-    } else {
-        return { row, static_cast<int>(line.size() - 1) };
     }
+
+    return { row, static_cast<int>(line.size() - 1) };
 }
 
 bool Buffer::isWord(int row, int col) const noexcept
@@ -249,4 +249,4 @@ bool Buffer::isSpace(int c) const noexcept { return characterType(c) == Internal
 bool Buffer::isAlpha(int c) const noexcept { return characterType(c) == Internal::CharacterType::ALPHA; }
 bool Buffer::isDigit(int c) const noexcept { return characterType(c) == Internal::CharacterType::DIGIT; }
 bool Buffer::isSpecial(int c) const noexcept { return characterType(c) == Internal::CharacterType::SPECIAL; }
-bool Buffer::isSameType(int firstChar, int secondChar) const noexcept { return characterType(firstChar) == characterType(secondChar); }
+bool Buffer::isSameType(int first, int second) const noexcept { return characterType(first) == characterType(second); }

@@ -93,12 +93,10 @@ void Editor::setMode(Mode::Type mode)
             m_mode = std::make_unique<NormalMode>();
             m_modeType = Mode::Type::normal;
             break;
-
         case Mode::Type::visual:
             m_mode = std::make_unique<VisualMode>();
             m_modeType = Mode::Type::visual;
             break;
-
         case Mode::Type::insert:
             m_mode = std::make_unique<InsertMode>();
             m_modeType = Mode::Type::insert;
