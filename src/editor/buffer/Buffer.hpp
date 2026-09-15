@@ -37,12 +37,12 @@ public:
     bool isAlpha(int c) const noexcept;
     bool isDigit(int c) const noexcept;
     bool isSpecial(int c) const noexcept;
-    bool isSameType(int firstChar, int secondChar) const noexcept;
+    bool isSameType(int first, int second) const noexcept;
 
 public:
     const std::vector<std::string>& lines() const;
     int lineCols(int row);
-    std::string_view getText(int row) const;
+    const std::string& getText(int row) const;
     std::size_t lineCount() const;
     int firstCharacterPos(int row, int col) const;
     Position nextWordPos(int row, int col) const noexcept;

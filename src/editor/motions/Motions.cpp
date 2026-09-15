@@ -1,5 +1,4 @@
 #include "editor/motions/Motions.hpp"
-#include <algorithm>
 
 void Motions::up(Cursor& cursor, const Buffer& buffer)
 {
@@ -38,7 +37,7 @@ void Motions::left(Cursor& cursor, const Buffer& buffer)
 void Motions::endLine(Cursor& cursor, const Buffer& buffer)
 {
     const auto& line{ buffer.getText(cursor.row()) };
-    const auto lineCols{ line.empty() ? 0 : static_cast<int>(buffer.getText(cursor.row()).length() - 1) };
+    const auto lineCols{ line.empty() ? 0 : static_cast<int>(line.length()) - 1 };
 
     if (cursor.col() < lineCols) {
         cursor.syncCols(lineCols);
@@ -52,7 +51,7 @@ void Motions::startLine(Cursor& cursor, const Buffer& buffer)
 
 void Motions::firstCharacter(Cursor& cursor, const Buffer& buffer)
 {
-    cursor.syncCols(static_cast<int>(buffer.firstCharacterPos(cursor.row(), cursor.col())));
+    cursor.syncCols(buffer.firstCharacterPos(cursor.row(), cursor.col()));
 }
 
 void Motions::nextWord(Cursor& cursor, const Buffer& buffer)

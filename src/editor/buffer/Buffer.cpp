@@ -102,7 +102,7 @@ const std::vector<std::string>& Buffer::lines() const
     return m_lines;
 }
 
-std::string_view Buffer::getText(const int row) const
+const std::string& Buffer::getText(const int row) const
 {
     if (row < 0 || row >= m_lines.size()) {
         throw std::out_of_range{ std::format("ERROR {}: cursor row is out of range: {} out of {}", __PRETTY_FUNCTION__, row, m_lines.size() - 1) };
